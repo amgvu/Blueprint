@@ -3,6 +3,14 @@ export type FigmaFile = {
   lastModified?: string;
   thumbnailUrl?: string;
   document: FigmaDocumentNode;
+  components?: Record<string, unknown>;
+  componentSets?: Record<string, unknown>;
+  schemaVersion?: number;
+  styles?: Record<string, unknown>;
+  version?: string;
+  role?: string;
+  editorType?: string;
+  linkAccess?: string;
 };
 
 export type FigmaNodeType =
@@ -30,6 +38,9 @@ export type FigmaPaint = {
   visible?: boolean;
   opacity?: number;
   color?: FigmaColor;
+  blendMode?: string;
+  gradientHandlePositions?: { x: number; y: number }[];
+  gradientStops?: { color: FigmaColor; position: number }[];
 };
 
 export type FigmaEffect = {
@@ -53,6 +64,12 @@ export type FigmaTextStyle = {
   textAutoResize?: "HEIGHT" | "WIDTH_AND_HEIGHT" | "NONE";
   lineHeightPx?: number | null;
   letterSpacing?: number | null;
+  fontStyle?: string;
+  fontWeight?: number;
+  lineHeightPercent?: number;
+  lineHeightPercentFontSize?: number;
+  lineHeightUnit?: string;
+  paragraphSpacing?: number;
 };
 
 export type FigmaNodeBase = {
@@ -63,12 +80,22 @@ export type FigmaNodeBase = {
   opacity?: number;
   absoluteBoundingBox?: FigmaRect;
   relativeTransform?: [[number, number, number], [number, number, number]];
+  absoluteRenderBounds?: FigmaRect;
   rotation?: number;
   constraints?: FigmaConstraints;
   layoutPositioning?: "AUTO" | "ABSOLUTE";
+  layoutAlign?: "INHERIT" | "STRETCH" | "MIN" | "CENTER" | "MAX";
+  layoutGrow?: number;
+  layoutSizingHorizontal?: "HUG" | "FILL" | "FIXED";
+  layoutSizingVertical?: "HUG" | "FILL" | "FIXED";
+  scrollBehavior?: "SCROLLS" | "FIXED";
+  blendMode?: string;
   fills?: FigmaPaint[];
   strokes?: FigmaPaint[];
+  strokeWeight?: number;
+  strokeAlign?: "INSIDE" | "OUTSIDE" | "CENTER";
   effects?: FigmaEffect[];
+  boundVariables?: unknown;
 };
 
 export type FigmaDocumentNode = FigmaNodeBase & {
@@ -81,6 +108,9 @@ export type FigmaCanvasNode = FigmaNodeBase & {
   children?: FigmaNode[];
   backgroundColor?: FigmaColor;
   background?: FigmaPaint[];
+  prototypeStartNodeID?: string | null;
+  flowStartingPoints?: unknown[];
+  prototypeDevice?: unknown;
 };
 
 export type FigmaFrameNode = FigmaNodeBase & {
@@ -93,8 +123,6 @@ export type FigmaFrameNode = FigmaNodeBase & {
   itemSpacing?: number;
   primaryAxisAlignItems?: FigmaAxisAlign;
   counterAxisAlignItems?: FigmaAxisAlign;
-  layoutAlign?: "INHERIT" | "STRETCH" | "MIN" | "CENTER" | "MAX";
-  layoutGrow?: number;
   paddingTop?: number;
   paddingRight?: number;
   paddingBottom?: number;
@@ -102,6 +130,7 @@ export type FigmaFrameNode = FigmaNodeBase & {
   backgroundColor?: FigmaColor;
   background?: FigmaPaint[];
   clipsContent?: boolean;
+  cornerSmoothing?: number;
   cornerRadius?: number;
   rectangleCornerRadii?: [number, number, number, number];
 };
@@ -112,11 +141,11 @@ export type FigmaTextNode = FigmaNodeBase & {
   style?: FigmaTextStyle;
   textAlignHorizontal?: "LEFT" | "CENTER" | "RIGHT" | "JUSTIFIED";
   textAlignVertical?: "TOP" | "CENTER" | "BOTTOM";
-  paragraphSpacing?: number;
 };
 
 export type FigmaRectangleNode = FigmaNodeBase & {
   type: "RECTANGLE";
+  cornerSmoothing?: number;
   cornerRadius?: number;
   rectangleCornerRadii?: [number, number, number, number];
   strokeWeight?: number;
