@@ -1,4 +1,4 @@
 export * from "./api";
 export * from "./types/figma.types";
-export * from "./utils/extract-key";
-export * from "./utils/get-env";
+export * from "./normalize";
+export * from "./normalize/types/normalized.types";

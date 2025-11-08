@@ -1,5 +1,5 @@
 import { describe, test, expect, vi } from "vitest";
-import { fetchFigmaFileFromEnv } from "../api";
+import { fetchFigmaFileFromEnv } from "..";
 
 function headerValue(
   init: RequestInit | undefined,

@@ -1,6 +1,6 @@
-import type { FigmaFile } from "./types/figma.types";
-import { getEnv } from "./utils/get-env";
-import { extractFileKeyFromUrl } from "./utils/extract-key";
+import type { FigmaFile } from "../types/figma.types";
+import { getEnv } from "./get-env";
+import { extractFileKeyFromUrl } from "./extract-key";
 
 export async function fetchFigmaFileFromEnv(
   fetchImpl?: typeof fetch

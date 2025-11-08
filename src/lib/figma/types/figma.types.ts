@@ -177,3 +177,4 @@ export type FigmaNode =
   | FigmaInstanceNode;
 
 export type FigmaTreeNode = FigmaDocumentNode | FigmaCanvasNode | FigmaNode;
+
