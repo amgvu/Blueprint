@@ -131,16 +131,23 @@ export function mapChildCss(
       const parentAbs = index.nodes[pId]?.absolute;
       const childAbs = node.absolute;
       if (parentAbs && childAbs) {
+        const padL = parent?.layout?.padding?.left ?? 0;
+        const padR = parent?.layout?.padding?.right ?? 0;
+        const currentLeft = childAbs.x - parentAbs.x;
+        const contentWidth = parentAbs.width - padL - padR;
+        const expectedCenteredLeft = padL + (contentWidth - childAbs.width) / 2;
+        const isGeomCentered =
+          Math.abs(Math.round(currentLeft) - Math.round(expectedCenteredLeft)) <= 2;
+
         if (
           node.type === "text" &&
-          node.text?.textAlign === "center" &&
-          parent?.sizing?.widthPx != null
+          (node.text?.textAlign === "center" || isGeomCentered)
         ) {
-          const pw = parent.sizing.widthPx as number;
-          inlineDecls.left = px((pw - childAbs.width) / 2);
+          inlineDecls.left = px(expectedCenteredLeft);
           inlineDecls.top = px(childAbs.y - parentAbs.y);
+          classDecls["text-align"] = "center";
         } else {
-          inlineDecls.left = px(childAbs.x - parentAbs.x);
+          inlineDecls.left = px(currentLeft);
           inlineDecls.top = px(childAbs.y - parentAbs.y);
         }
       }
