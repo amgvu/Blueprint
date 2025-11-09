@@ -64,10 +64,12 @@ export function mapFlexContainerCss(
       if (node.layout.clipsContent) decls.overflow = "hidden";
     }
   }
-  const bg = rgbaToCss(node.style.background);
-  if (bg) decls["background-color"] = bg;
-  const br = borderRadiusToCss(node.style.borderRadius);
-  if (br) decls["border-radius"] = br;
+  if (node.type !== "text") {
+    const bg = rgbaToCss(node.style.background);
+    if (bg) decls["background-color"] = bg;
+    const br = borderRadiusToCss(node.style.borderRadius);
+    if (br) decls["border-radius"] = br;
+  }
   return decls;
 }
 
@@ -93,7 +95,9 @@ export function mapChildCss(
       if (parentLayout === "horizontal") {
         const grow = node.sizing.grow && node.sizing.grow > 0 ? node.sizing.grow : 1;
         classDecls["flex"] = `${grow} 1 0`;
-      } else if (parentLayout === "vertical" || parentLayout === "none" || !parentLayout) {
+      } else if (parentLayout === "vertical") {
+        if (!node.sizing.alignSelf) classDecls["align-self"] = "stretch";
+      } else if (parentLayout === "none" || !parentLayout) {
         classDecls.width = "100%";
       }
     }
@@ -116,6 +120,9 @@ export function mapChildCss(
       classDecls["flex-grow"] = `${node.sizing.grow}`;
   }
 
+  if (node.type === "text") {
+    classDecls.margin = "0";
+  }
   if (node.type === "text" && node.text && node.text.textAlign) {
     classDecls["text-align"] =
       node.text.textAlign === "justified" ? "justify" : node.text.textAlign;
