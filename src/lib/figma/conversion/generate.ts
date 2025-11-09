@@ -46,7 +46,15 @@ export function generateFromIndex(index: NormalizedIndex): {
 } {
   const registry = new ClassRegistry();
   const needsRelative = computeParentsNeedingRelative(index);
-  const root = buildRenderTree(index, index.rootId, registry, needsRelative);
+  const root =
+    buildRenderTree(index, index.rootId, registry, needsRelative) ||
+    {
+      id: index.rootId,
+      tag: "div",
+      classNames: [],
+      inline: {},
+      children: [],
+    };
   const html = emitHtml(root, 0);
   const css = registry.cssText();
   return { html, css };
@@ -58,7 +66,7 @@ function buildRenderTree(
   registry: ClassRegistry,
   needsRelative: Set<string>,
   parentId: string | null = null
-): RenderNode {
+): RenderNode | null {
   const node = index.nodes[id];
   const tag = pickTag(node.type);
   const containerDecls = mapFlexContainerCss(index, id);
@@ -70,12 +78,25 @@ function buildRenderTree(
   const classB = registry.register(classDecls);
   const classNames = [classA, classB].filter(Boolean) as string[];
 
-  const textContent = node.type === "text" ? node.text?.characters : undefined;
+  const textContentRaw = node.type === "text" ? node.text?.characters : undefined;
+  const textContent =
+    typeof textContentRaw === "string" && textContentRaw.trim().length > 0
+      ? textContentRaw
+      : undefined;
 
   const childIds = index.children[id] || [];
-  const children = childIds.map((cid) =>
-    buildRenderTree(index, cid, registry, needsRelative, id)
-  );
+  const children = childIds
+    .map((cid) => buildRenderTree(index, cid, registry, needsRelative, id))
+    .filter(Boolean) as RenderNode[];
+
+  const hasInline = Object.keys(inlineDecls).length > 0;
+  const isRenderable =
+    (textContent && textContent.length > 0) ||
+    children.length > 0 ||
+    classNames.length > 0 ||
+    hasInline;
+  if (!isRenderable) return null;
+
   return { id, tag, classNames, inline: inlineDecls, textContent, children };
 }
 
