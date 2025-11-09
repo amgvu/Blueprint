@@ -81,31 +81,40 @@ export function mapChildCss(
   const classDecls: CssDecls = {};
   const inlineDecls: CssDecls = {};
 
-  if (node.sizing.width === "fixed" && node.sizing.widthPx != null)
-    classDecls.width = px(node.sizing.widthPx);
-  if (node.sizing.height === "fixed" && node.sizing.heightPx != null)
-    classDecls.height = px(node.sizing.heightPx);
-  if (
-    node.sizing.width !== "fill" &&
-    node.sizing.widthPx != null &&
-    !classDecls.width
-  )
-    classDecls.width = px(node.sizing.widthPx);
-  if (
-    node.sizing.height !== "fill" &&
-    node.sizing.heightPx != null &&
-    !classDecls.height
-  )
-    classDecls.height = px(node.sizing.heightPx);
-  if (node.sizing.width === "fill")
-    classDecls["flex"] =
-      classDecls["flex"] || node.sizing.height === "fill"
-        ? "1 1 auto"
-        : "1 1 auto";
-  if (node.sizing.alignSelf)
-    classDecls["align-self"] = alignSelfToCss(node.sizing.alignSelf);
-  if (node.sizing.grow && node.sizing.grow > 0)
-    classDecls["flex-grow"] = `${node.sizing.grow}`;
+  const parentLayout = parent?.layout?.mode;
+
+  if (node.sizing.position !== "absolute") {
+    if (node.sizing.width === "fixed" && node.sizing.widthPx != null)
+      classDecls.width = px(node.sizing.widthPx);
+    if (node.sizing.height === "fixed" && node.sizing.heightPx != null)
+      classDecls.height = px(node.sizing.heightPx);
+
+    if (node.sizing.width === "fill") {
+      if (parentLayout === "horizontal") {
+        const grow = node.sizing.grow && node.sizing.grow > 0 ? node.sizing.grow : 1;
+        classDecls["flex"] = `${grow} 1 0`;
+      } else if (parentLayout === "vertical" || parentLayout === "none" || !parentLayout) {
+        classDecls.width = "100%";
+      }
+    }
+
+    if (node.sizing.height === "fill") {
+      if (parentLayout === "vertical") {
+        const grow = node.sizing.grow && node.sizing.grow > 0 ? node.sizing.grow : 1;
+        classDecls["flex"] = `${grow} 1 0`;
+      } else if (parentLayout === "horizontal") {
+        if (!node.sizing.alignSelf) classDecls["align-self"] = "stretch";
+      } else if (parentLayout === "none" || !parentLayout) {
+        classDecls.height = "100%";
+      }
+    }
+
+    if (node.sizing.alignSelf)
+      classDecls["align-self"] = alignSelfToCss(node.sizing.alignSelf);
+
+    if (!classDecls["flex"] && node.sizing.grow && node.sizing.grow > 0)
+      classDecls["flex-grow"] = `${node.sizing.grow}`;
+  }
 
   if (node.type === "text" && node.text && node.text.textAlign) {
     classDecls["text-align"] =
