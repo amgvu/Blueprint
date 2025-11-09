@@ -10,6 +10,7 @@ import type {
   AxisAlign,
   LayoutMode,
   NormalizedNode,
+  NormalizedText,
 } from "./types/normalized.types";
 import type { NormalizedOutput } from "./types/normalized.types";
 import { toRgba } from "./utils/color";
@@ -57,15 +58,14 @@ function normalizeFrameLike(
     alignSelf: mapAlignSelf(node.layoutAlign),
     position: node.layoutPositioning === "ABSOLUTE" ? "absolute" : "static",
   } as const;
-  const absolute =
-    node.layoutPositioning === "ABSOLUTE" && node.absoluteBoundingBox
-      ? {
-          x: node.absoluteBoundingBox.x,
-          y: node.absoluteBoundingBox.y,
-          width: node.absoluteBoundingBox.width,
-          height: node.absoluteBoundingBox.height,
-        }
-      : undefined;
+  const absolute = node.absoluteBoundingBox
+    ? {
+        x: node.absoluteBoundingBox.x,
+        y: node.absoluteBoundingBox.y,
+        width: node.absoluteBoundingBox.width,
+        height: node.absoluteBoundingBox.height,
+      }
+    : undefined;
   const style = {
     background: toRgba(node.backgroundColor) || null,
     borderRadius: mapBorderRadius(node.cornerRadius, node.rectangleCornerRadii),
@@ -100,15 +100,14 @@ function normalizeLeaf(node: FigmaNode): NormalizedNode {
       alignSelf: mapAlignSelf(node.layoutAlign),
       position: node.layoutPositioning === "ABSOLUTE" ? "absolute" : "static",
     },
-    absolute:
-      node.layoutPositioning === "ABSOLUTE" && node.absoluteBoundingBox
-        ? {
-            x: node.absoluteBoundingBox.x,
-            y: node.absoluteBoundingBox.y,
-            width: node.absoluteBoundingBox.width,
-            height: node.absoluteBoundingBox.height,
-          }
-        : undefined,
+    absolute: node.absoluteBoundingBox
+      ? {
+          x: node.absoluteBoundingBox.x,
+          y: node.absoluteBoundingBox.y,
+          width: node.absoluteBoundingBox.width,
+          height: node.absoluteBoundingBox.height,
+        }
+      : undefined,
     style: {
       background: toRgba((node as any).backgroundColor) || null,
       borderRadius: mapBorderRadius(
@@ -118,11 +117,19 @@ function normalizeLeaf(node: FigmaNode): NormalizedNode {
     },
   } as const;
   if (node.type === "TEXT") {
-    const text = {
+    const text: NormalizedText = {
       characters: node.characters,
       fontFamily: node.style?.fontFamily,
       fontSize: node.style?.fontSize,
       fontWeight: node.style?.fontWeight,
+      textAlign:
+        node.textAlignHorizontal === "CENTER"
+          ? "center"
+          : node.textAlignHorizontal === "RIGHT"
+          ? "right"
+          : node.textAlignHorizontal === "JUSTIFIED"
+          ? "justified"
+          : "left",
     };
     return { ...common, text };
   }

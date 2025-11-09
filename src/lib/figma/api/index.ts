@@ -23,3 +23,23 @@ export async function fetchFigmaFileFromEnv(
   const data = (await res.json()) as FigmaFile;
   return data;
 }
+
+export async function fetchFigmaFile(params: {
+  apiKey: string;
+  fileUrlOrKey: string;
+  fetchImpl?: typeof fetch;
+}): Promise<FigmaFile> {
+  const { apiKey, fileUrlOrKey, fetchImpl } = params;
+  if (!apiKey || !fileUrlOrKey)
+    throw new Error("Missing apiKey or fileUrlOrKey");
+  const key = extractFileKeyFromUrl(fileUrlOrKey);
+  const res = await (fetchImpl || fetch)(
+    `https://api.figma.com/v1/files/${key}`,
+    { headers: { "X-Figma-Token": apiKey } }
+  );
+  if (!res.ok) {
+    const body = await res.text();
+    throw new Error(`Figma API error ${res.status}: ${body}`);
+  }
+  return (await res.json()) as FigmaFile;
+}

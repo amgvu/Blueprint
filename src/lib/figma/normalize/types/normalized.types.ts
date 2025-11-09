@@ -49,6 +49,7 @@ export type NormalizedText = {
   fontFamily?: string;
   fontSize?: number;
   fontWeight?: number;
+  textAlign?: "left" | "center" | "right" | "justified";
 };
 
 export type NormalizedNode = {
