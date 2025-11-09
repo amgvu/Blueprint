@@ -111,6 +111,13 @@ export function mapChildCss(
     classDecls["text-align"] =
       node.text.textAlign === "justified" ? "justify" : node.text.textAlign;
   }
+  if (
+    node.type === "text" &&
+    node.text?.characters &&
+    node.text.characters.includes("\n")
+  ) {
+    classDecls["white-space"] = "pre-line";
+  }
 
   if (node.type === "text") {
     const wp = node.sizing.widthPx;
@@ -137,7 +144,9 @@ export function mapChildCss(
         const contentWidth = parentAbs.width - padL - padR;
         const expectedCenteredLeft = padL + (contentWidth - childAbs.width) / 2;
         const isGeomCentered =
-          Math.abs(Math.round(currentLeft) - Math.round(expectedCenteredLeft)) <= 2;
+          Math.abs(
+            Math.round(currentLeft) - Math.round(expectedCenteredLeft)
+          ) <= 2;
 
         if (
           node.type === "text" &&
