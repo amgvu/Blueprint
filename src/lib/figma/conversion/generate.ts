@@ -68,8 +68,7 @@ function buildRenderTree(
 
   const classA = registry.register(containerDecls);
   const classB = registry.register(classDecls);
-  const classC = registry.register(inlineDecls);
-  const classNames = [classA, classB, classC].filter(Boolean) as string[];
+  const classNames = [classA, classB].filter(Boolean) as string[];
 
   const textContent = node.type === "text" ? node.text?.characters : undefined;
 
@@ -77,7 +76,7 @@ function buildRenderTree(
   const children = childIds.map((cid) =>
     buildRenderTree(index, cid, registry, needsRelative, id)
   );
-  return { id, tag, classNames, inline: {}, textContent, children };
+  return { id, tag, classNames, inline: inlineDecls, textContent, children };
 }
 
 function pickTag(type: string): string {
