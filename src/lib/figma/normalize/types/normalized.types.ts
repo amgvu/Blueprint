@@ -56,6 +56,7 @@ export type NormalizedText = {
   fontSize?: number;
   fontWeight?: number;
   textAlign?: "left" | "center" | "right" | "justified";
+  lineHeightPx?: number | null;
 };
 
 export type NormalizedNode = {

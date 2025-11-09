@@ -127,6 +127,14 @@ export function mapChildCss(
 
   if (node.type === "text") {
     classDecls.margin = "0";
+    if (node.text?.fontSize != null)
+      classDecls["font-size"] = px(node.text.fontSize);
+    if (node.text?.fontWeight != null)
+      classDecls["font-weight"] = `${node.text.fontWeight}`;
+    if (node.text?.fontFamily)
+      classDecls["font-family"] = node.text.fontFamily;
+    if (node.text?.lineHeightPx != null)
+      classDecls["line-height"] = px(node.text.lineHeightPx || 0);
   }
   if (node.type === "text" && node.text && node.text.textAlign) {
     classDecls["text-align"] =
@@ -174,6 +182,10 @@ export function mapChildCss(
 
         if (constraints?.horizontal === "center") {
           inlineDecls.left = px(expectedCenteredLeft);
+        } else if (constraints?.horizontal === "left_right") {
+          const right = parentAbs.x + parentAbs.width - padR - (childAbs.x + childAbs.width);
+          inlineDecls.left = px(currentLeft);
+          inlineDecls.right = px(right);
         } else if (constraints?.horizontal === "right") {
           const right = parentAbs.x + parentAbs.width - padR - (childAbs.x + childAbs.width);
           inlineDecls.right = px(right);
@@ -194,6 +206,11 @@ export function mapChildCss(
           const contentHeight = parentAbs.height - padT - padB;
           const expectedCenteredTop = padT + (contentHeight - childAbs.height) / 2;
           inlineDecls.top = px(expectedCenteredTop);
+        } else if (constraints?.vertical === "top_bottom") {
+          const padB = parent?.layout?.padding?.bottom ?? 0;
+          const bottom = parentAbs.y + parentAbs.height - padB - (childAbs.y + childAbs.height);
+          inlineDecls.top = topPx;
+          inlineDecls.bottom = px(bottom);
         } else if (constraints?.vertical === "bottom") {
           const padB = parent?.layout?.padding?.bottom ?? 0;
           const bottom = parentAbs.y + parentAbs.height - padB - (childAbs.y + childAbs.height);
@@ -203,8 +220,10 @@ export function mapChildCss(
         }
       }
     }
-    inlineDecls.width = px(node.absolute.width);
-    inlineDecls.height = px(node.absolute.height);
+    const stretchX = node.sizing.constraints?.horizontal === "left_right";
+    const stretchY = node.sizing.constraints?.vertical === "top_bottom";
+    if (!stretchX) inlineDecls.width = px(node.absolute.width);
+    if (!stretchY) inlineDecls.height = px(node.absolute.height);
   }
 
   return { classDecls, inlineDecls };

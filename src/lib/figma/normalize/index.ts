@@ -125,6 +125,7 @@ function normalizeLeaf(node: FigmaNode): NormalizedNode {
       fontFamily: node.style?.fontFamily,
       fontSize: node.style?.fontSize,
       fontWeight: node.style?.fontWeight,
+      lineHeightPx: node.style?.lineHeightPx ?? null,
       textAlign:
         node.textAlignHorizontal === "CENTER"
           ? "center"

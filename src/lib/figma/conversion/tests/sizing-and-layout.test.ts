@@ -170,4 +170,42 @@ describe("text and absolute", () => {
     expect(html.includes("left:")).toBe(false);
     expect(html.includes("top:")).toBe(false);
   });
+
+  test("Absolute child with left_right and top_bottom stretch omits width/height and sets both offsets", () => {
+    const child = rect(
+      "absStretch",
+      { width: "fixed", height: "fixed", widthPx: 100, heightPx: 50 },
+      "absolute",
+      { x: 20, y: 30, width: 100, height: 50 }
+    );
+    (child as any).sizing.constraints = {
+      horizontal: "left_right",
+      vertical: "top_bottom",
+    };
+    const root = frame("root", "vertical", [child]);
+    (root as any).absolute = { x: 0, y: 0, width: 400, height: 300 };
+    const index = createIndex(root);
+    const { html } = generateFromIndex(index);
+    expect(html.includes("left:20px;")).toBe(true);
+    expect(html.includes("right:280px;")).toBe(true);
+    expect(html.includes("top:30px;")).toBe(true);
+    expect(html.includes("bottom:220px;")).toBe(true);
+    expect(html.includes("width:")).toBe(false);
+    expect(html.includes("height:")).toBe(false);
+  });
+
+  test("Text typography mapping applied (size/weight/family/line-height)", () => {
+    const t = textNode("t-typo", "Hello");
+    (t as any).text.fontSize = 16;
+    (t as any).text.fontWeight = 700;
+    (t as any).text.fontFamily = "Inter";
+    (t as any).text.lineHeightPx = 20;
+    const root = frame("root", "vertical", [t]);
+    const index = createIndex(root);
+    const { css } = generateFromIndex(index);
+    expect(css.includes("font-size:16px;"));
+    expect(css.includes("font-weight:700;"));
+    expect(css.includes("font-family:Inter;"));
+    expect(css.includes("line-height:20px;"));
+  });
 });
