@@ -1,8 +1,9 @@
-import type { FigmaAutoLayoutMode } from "../../types/figma.types";
+import type { FigmaAutoLayoutMode, FigmaConstraints } from "../../types/figma.types";
 import type {
   AxisAlign,
   LayoutMode,
   SizeIntent,
+  NormalizedConstraints,
 } from "../types/normalized.types";
 
 export function mapLayoutMode(m?: FigmaAutoLayoutMode): LayoutMode {
@@ -42,4 +43,31 @@ export function mapAlignSelf(
   if (v === "CENTER") return "center";
   if (v === "MAX") return "end";
   return "start";
+}
+
+export function mapConstraints(
+  c?: FigmaConstraints
+): NormalizedConstraints | undefined {
+  if (!c) return undefined;
+  const h: NormalizedConstraints["horizontal"] =
+    c.horizontal === "LEFT"
+      ? "left"
+      : c.horizontal === "RIGHT"
+      ? "right"
+      : c.horizontal === "CENTER"
+      ? "center"
+      : c.horizontal === "LEFT_RIGHT"
+      ? "left_right"
+      : "scale";
+  const v: NormalizedConstraints["vertical"] =
+    c.vertical === "TOP"
+      ? "top"
+      : c.vertical === "BOTTOM"
+      ? "bottom"
+      : c.vertical === "CENTER"
+      ? "center"
+      : c.vertical === "TOP_BOTTOM"
+      ? "top_bottom"
+      : "scale";
+  return { horizontal: h, vertical: v };
 }

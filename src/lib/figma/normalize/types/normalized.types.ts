@@ -6,6 +6,11 @@ export type LayoutMode = "none" | "horizontal" | "vertical";
 
 export type SizeIntent = "hug" | "fill" | "fixed";
 
+export type NormalizedConstraints = {
+  horizontal: "left" | "right" | "center" | "left_right" | "scale";
+  vertical: "top" | "bottom" | "center" | "top_bottom" | "scale";
+};
+
 export type BorderRadius =
   | number
   | { topLeft: number; topRight: number; bottomRight: number; bottomLeft: number };
@@ -28,6 +33,7 @@ export type NormalizedSizing = {
   grow?: number;
   alignSelf?: AxisAlign;
   position: "static" | "absolute";
+  constraints?: NormalizedConstraints;
 };
 
 export type NormalizedLayout = {

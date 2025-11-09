@@ -14,6 +14,7 @@ export function rgbaToCss(c?: RGBA | null): string | undefined {
   const g = Math.round(c.g * 255);
   const b = Math.round(c.b * 255);
   const a = Math.max(0, Math.min(1, c.a));
+  if (a === 0) return undefined;
   return `rgba(${r}, ${g}, ${b}, ${a})`;
 }
 
@@ -48,12 +49,16 @@ export function mapFlexContainerCss(
       decls.display = "flex";
       decls["flex-direction"] =
         node.layout.mode === "horizontal" ? "row" : "column";
-      if (node.layout.gap != null) decls.gap = px(node.layout.gap);
+      if (node.layout.gap != null && node.layout.gap > 0)
+        decls.gap = px(node.layout.gap);
       const p = node.layout.padding;
-      if (p)
-        decls.padding = [px(p.top), px(p.right), px(p.bottom), px(p.left)].join(
-          " "
-        );
+      if (p) {
+        const total = (p.top || 0) + (p.right || 0) + (p.bottom || 0) + (p.left || 0);
+        if (total > 0)
+          decls.padding = [px(p.top), px(p.right), px(p.bottom), px(p.left)].join(
+            " "
+          );
+      }
       if (node.layout.align) {
         if (node.layout.align.main)
           decls["justify-content"] = alignToJustify(node.layout.align.main);
@@ -164,16 +169,37 @@ export function mapChildCss(
             Math.round(currentLeft) - Math.round(expectedCenteredLeft)
           ) <= 2;
 
-        if (
-          node.type === "text" &&
-          (node.text?.textAlign === "center" || isGeomCentered)
-        ) {
+        const constraints = node.sizing.constraints;
+        const topPx = px(childAbs.y - parentAbs.y);
+
+        if (constraints?.horizontal === "center") {
           inlineDecls.left = px(expectedCenteredLeft);
-          inlineDecls.top = px(childAbs.y - parentAbs.y);
-          classDecls["text-align"] = "center";
+        } else if (constraints?.horizontal === "right") {
+          const right = parentAbs.x + parentAbs.width - padR - (childAbs.x + childAbs.width);
+          inlineDecls.right = px(right);
         } else {
-          inlineDecls.left = px(currentLeft);
-          inlineDecls.top = px(childAbs.y - parentAbs.y);
+          if (
+            node.type === "text" &&
+            (node.text?.textAlign === "center" || isGeomCentered)
+          ) {
+            inlineDecls.left = px(expectedCenteredLeft);
+            classDecls["text-align"] = "center";
+          } else {
+            inlineDecls.left = px(currentLeft);
+          }
+        }
+        if (constraints?.vertical === "center") {
+          const padT = parent?.layout?.padding?.top ?? 0;
+          const padB = parent?.layout?.padding?.bottom ?? 0;
+          const contentHeight = parentAbs.height - padT - padB;
+          const expectedCenteredTop = padT + (contentHeight - childAbs.height) / 2;
+          inlineDecls.top = px(expectedCenteredTop);
+        } else if (constraints?.vertical === "bottom") {
+          const padB = parent?.layout?.padding?.bottom ?? 0;
+          const bottom = parentAbs.y + parentAbs.height - padB - (childAbs.y + childAbs.height);
+          inlineDecls.bottom = px(bottom);
+        } else {
+          inlineDecls.top = topPx;
         }
       }
     }

@@ -20,6 +20,7 @@ import {
   mapAxisAlignMain,
   mapLayoutMode,
   mapSizeIntent,
+  mapConstraints,
 } from "./utils/layout";
 import { mapBorderRadius } from "./utils/style";
 import { figmaTypeToNormalizedType } from "./utils/types";
@@ -57,6 +58,7 @@ function normalizeFrameLike(
     grow: node.layoutGrow,
     alignSelf: mapAlignSelf(node.layoutAlign),
     position: node.layoutPositioning === "ABSOLUTE" ? "absolute" : "static",
+    constraints: mapConstraints(node.constraints),
   } as const;
   const absolute = node.absoluteBoundingBox
     ? {
@@ -99,6 +101,7 @@ function normalizeLeaf(node: FigmaNode): NormalizedNode {
       grow: node.layoutGrow,
       alignSelf: mapAlignSelf(node.layoutAlign),
       position: node.layoutPositioning === "ABSOLUTE" ? "absolute" : "static",
+      constraints: mapConstraints(node.constraints),
     },
     absolute: node.absoluteBoundingBox
       ? {

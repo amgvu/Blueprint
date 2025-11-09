@@ -132,4 +132,42 @@ describe("text and absolute", () => {
     expect(html.includes("width:")).toBe(true);
     expect(html.includes("height:")).toBe(true);
   });
+
+  test("Absolute centered text stays centered with block-level tag", () => {
+    const t = textNode("t-forgot", "Forgot password");
+    (t as any).sizing.position = "absolute";
+    (t as any).absolute = { x: 16, y: 778, width: 361, height: 37 };
+
+    const root = frame("root", "vertical", [t]);
+    (root as any).absolute = { x: 0, y: 0, width: 393, height: 852 };
+
+    const index = createIndex(root);
+    const { html, css } = generateFromIndex(index);
+    expect(html.includes("Forgot password")).toBe(true);
+    expect(html.includes("position:absolute;")).toBe(true);
+    expect(html.includes("left:16px;")).toBe(true);
+    expect(html.includes("width:361px;")).toBe(true);
+    expect(css.includes("text-align:center;")).toBe(true);
+  });
+
+  test("Absolute child with right/bottom constraints uses right/bottom offsets", () => {
+    const child = rect(
+      "absRB",
+      { width: "fixed", height: "fixed", widthPx: 50, heightPx: 30 },
+      "absolute",
+      { x: 343, y: 812, width: 50, height: 30 }
+    );
+    (child as any).sizing.constraints = {
+      horizontal: "right",
+      vertical: "bottom",
+    };
+    const root = frame("root", "vertical", [child]);
+    (root as any).absolute = { x: 0, y: 0, width: 393, height: 852 };
+    const index = createIndex(root);
+    const { html } = generateFromIndex(index);
+    expect(html.includes("right:0px;")).toBe(true);
+    expect(html.includes("bottom:10px;")).toBe(true);
+    expect(html.includes("left:")).toBe(false);
+    expect(html.includes("top:")).toBe(false);
+  });
 });
