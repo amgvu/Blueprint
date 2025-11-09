@@ -1,0 +1,46 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`snapshot: full sign-in screen > generates expected HTML and CSS 1`] = `
+"<div class="c1">
+  <div class="c2 c3">
+    <div class="c4" style="height:852px;position:absolute;width:393px;">
+      <div class="c2" style="height:21px;left:0px;position:absolute;top:831px;width:393px;">
+        <div class="c5" style="height:5px;left:127px;position:absolute;top:8px;width:139px;"></div>
+      </div>
+      <p class="c6" style="height:58px;left:32px;position:absolute;top:170px;width:154px;">Sign in</p>
+      <div class="c7" style="height:117px;left:32px;position:absolute;top:252px;width:329px;">
+        <div class="c8 c9">
+          <p class="c6">andy@gmail.com</p>
+        </div>
+        <div class="c10 c11">
+          <p class="c6">Password</p>
+        </div>
+      </div>
+      <div class="c12" style="height:46px;left:16px;position:absolute;top:662px;width:361px;">
+        <p class="c6">Sign in</p>
+      </div>
+      <div class="c13" style="height:46px;left:16px;position:absolute;top:720px;width:361px;">
+        <p class="c6">Create account</p>
+      </div>
+      <p class="c14" style="height:37px;left:16px;position:absolute;top:778px;width:361px;">Forgot password</p>
+    </div>
+  </div>
+</div>"
+`;
+
+exports[`snapshot: full sign-in screen > generates expected HTML and CSS 2`] = `
+".c1{align-items:center;background-color:rgba(30, 30, 30, 1);display:flex;justify-content:center;min-height:100vh;position:relative;width:100%;}
+.c2{position:relative;}
+.c3{height:852px;width:393px;}
+.c4{background-color:rgba(250, 250, 250, 1);border-radius:32px;position:relative;}
+.c5{border-radius:100px;}
+.c6{margin:0;text-align:left;}
+.c7{align-items:flex-start;display:flex;flex-direction:column;justify-content:flex-start;}
+.c8{align-items:center;border-radius:8px 8px 0px 0px;display:flex;flex-direction:row;gap:10px;justify-content:flex-start;padding:20px 16px 20px 16px;}
+.c9{height:58px;width:329px;}
+.c10{align-items:center;border-radius:0px 0px 8px 8px;display:flex;flex-direction:row;gap:10px;justify-content:flex-start;padding:20px 16px 20px 16px;}
+.c11{height:59px;width:329px;}
+.c12{border-radius:62px;}
+.c13{background-color:rgba(225, 224, 230, 1);border-radius:62px;}
+.c14{margin:0 auto;text-align:center;width:361px;}"
+`;
