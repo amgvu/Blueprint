@@ -63,3 +63,20 @@ export type NormalizedNode = {
   text?: NormalizedText;
 };
 
+export type NormalizedShallowNode = Omit<NormalizedNode, "children">;
+
+export type NormalizedIndex = {
+  rootId: string;
+  nodes: Record<string, NormalizedShallowNode>;
+  parents: Record<string, string | null>;
+  children: Record<string, string[]>;
+  order: string[];
+  path: Record<string, string[]>;
+  byType?: Partial<Record<NormalizedNodeType, string[]>>;
+  depth: Record<string, number>;
+};
+
+export type NormalizedOutput = {
+  root: NormalizedNode;
+  index: NormalizedIndex;
+};

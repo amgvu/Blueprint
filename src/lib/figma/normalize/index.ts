@@ -11,6 +11,7 @@ import type {
   LayoutMode,
   NormalizedNode,
 } from "./types/normalized.types";
+import type { NormalizedOutput } from "./types/normalized.types";
 import { toRgba } from "./utils/color";
 import {
   mapAlignSelf,
@@ -21,6 +22,7 @@ import {
 } from "./utils/layout";
 import { mapBorderRadius } from "./utils/style";
 import { figmaTypeToNormalizedType } from "./utils/types";
+import { createIndex } from "./flatten";
 
 function normalizeFrameLike(
   node: FigmaFrameNode,
@@ -172,3 +174,11 @@ export function normalizeFile(file: FigmaFile): NormalizedNode {
   const doc: FigmaDocumentNode = file.document;
   return normalizeTree(doc);
 }
+
+export function normalizeFileWithIndex(file: FigmaFile): NormalizedOutput {
+  const root = normalizeFile(file);
+  const index = createIndex(root);
+  return { root, index };
+}
+
+export { createIndex };
