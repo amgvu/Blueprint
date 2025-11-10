@@ -1,3 +1,4 @@
+/* eslint-disable no-empty */
 /* eslint-disable no-useless-escape */
 import * as React from "react";
 import {
@@ -17,32 +18,29 @@ import {
 export type PreviewWindowProps = {
   html: string;
   css: string;
-  className?: string;
   height?: string;
 };
 
 export default function PreviewWindow({
   html,
   css,
-  className,
   height = "70vh",
 }: PreviewWindowProps) {
   const iframeRef = React.useRef<HTMLIFrameElement | null>(null);
 
   const srcDoc = React.useMemo(() => {
-    const base = `html,body{margin:0;padding:0;background:#ffffff;}`;
+    const base = `html,body{margin:0;padding:0;background:#1e1e1e;}`;
     return `<!DOCTYPE html><html><head><meta charset=\"utf-8\"><style>${base}</style><style>${css}</style></head><body>${html}</body></html>`;
   }, [html, css]);
 
   async function copy(text: string) {
     try {
       await navigator.clipboard.writeText(text);
-      // eslint-disable-next-line no-empty
     } catch {}
   }
 
   return (
-    <div className={className}>
+    <div className="my-16">
       <ResizablePanelGroup
         direction="horizontal"
         className="w-full rounded-lg border bg-card"
@@ -54,7 +52,7 @@ export default function PreviewWindow({
               ref={iframeRef}
               title="preview"
               srcDoc={srcDoc}
-              className="h-full w-full rounded-md border bg-white"
+              className="h-full w-full rounded-md"
             />
           </div>
         </ResizablePanel>
