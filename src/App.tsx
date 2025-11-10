@@ -26,7 +26,7 @@ function App() {
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [view, setView] = useState<"input" | "results">("input");
+  const [view, setView] = useState<"form" | "results">("form");
   const [html, setHtml] = useState("");
   const [css, setCss] = useState("");
 
@@ -71,7 +71,7 @@ function App() {
 
   return (
     <main className="min-h-screen bg-background text-foreground">
-      {view === "input" ? (
+      {view === "form" ? (
         <GenerationForm
           questions={generationQuestions}
           initialValues={initialValues}
@@ -87,9 +87,14 @@ function App() {
           transition={{ duration: 0.25, ease: "easeOut" }}
         >
           <div className="mb-2 flex items-center justify-between">
-            <h1 className="text-2xl font-semibold">Converted Mockup Preview</h1>
+            <div>
+              <h1 className="text-lg font-medium">Conversion Preview</h1>
+              <h2 className="text-muted-foreground text-sm">
+                Figma API {`->`} HTML/CSS
+              </h2>
+            </div>
             <div className="flex items-center gap-2">
-              <Button variant="outline" onClick={() => setView("input")}>
+              <Button variant="outline" onClick={() => setView("form")}>
                 Back to form
               </Button>
               <Button onClick={downloadZip}>Download .zip</Button>

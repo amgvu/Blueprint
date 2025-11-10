@@ -7,7 +7,7 @@ import {
   ResizableHandle,
 } from "@/components/ui/resizable";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import {
   Tooltip,
@@ -102,11 +102,14 @@ export default function PreviewWindow({
                   color: themes.vsDark.plain.color as string,
                 }}
               >
-                <ScrollArea className="h-full rounded-md border p-0">
+                <ScrollArea
+                  className="h-full rounded-md border p-0"
+                  type="always"
+                >
                   <Highlight theme={themes.vsDark} code={html} language="html">
                     {({ tokens, getLineProps, getTokenProps }) => (
                       <pre
-                        className=" m-0 p-3 font-mono text-xs leading-relaxed whitespace-pre-wrap"
+                        className="m-0 p-3 font-mono text-xs leading-relaxed whitespace-pre"
                         style={{
                           backgroundColor: "transparent",
                           color: "inherit",
@@ -122,22 +125,26 @@ export default function PreviewWindow({
                       </pre>
                     )}
                   </Highlight>
+                  <ScrollBar orientation="horizontal" />
                 </ScrollArea>
               </TabsContent>
               <TabsContent
                 value="css"
-                className="h-[calc(100%-2.5rem)]"
+                className="h-[calc(100%-3.5rem)]"
                 style={{
                   backgroundColor: themes.vsDark.plain
                     .backgroundColor as string,
                   color: themes.vsDark.plain.color as string,
                 }}
               >
-                <ScrollArea className="h-full rounded-md border p-0">
+                <ScrollArea
+                  className="h-full rounded-md border p-0"
+                  type="always"
+                >
                   <Highlight theme={themes.vsDark} code={css} language="css">
                     {({ tokens, getLineProps, getTokenProps }) => (
                       <pre
-                        className="m-0 p-3 font-mono text-xs leading-relaxed whitespace-pre-wrap"
+                        className="m-0 p-3 font-mono text-xs leading-relaxed whitespace-pre"
                         style={{
                           backgroundColor: "transparent",
                           color: "inherit",
@@ -153,6 +160,7 @@ export default function PreviewWindow({
                       </pre>
                     )}
                   </Highlight>
+                  <ScrollBar orientation="horizontal" />
                 </ScrollArea>
               </TabsContent>
             </Tabs>
