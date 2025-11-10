@@ -6,6 +6,7 @@ import {
   alignToJustify,
   alignToItems,
   alignSelfToCss,
+  gradientToCss,
 } from "./utils";
 import type { ConversionOptions, CssDecls } from "./types";
 
@@ -58,10 +59,19 @@ export function mapFlexContainerCss(
     }
   }
   if (node.type !== "text") {
-    const bg = rgbaToCss(node.style.background);
-    if (bg) decls["background-color"] = bg;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const grad = gradientToCss(node.style.backgroundGradient as any);
+    if (grad) {
+      decls["background"] = grad;
+    } else {
+      const bg = rgbaToCss(node.style.background);
+      if (bg) decls["background-color"] = bg;
+    }
     const br = borderRadiusToCss(node.style.borderRadius, P);
     if (br) decls["border-radius"] = br;
+    const bw = node.style.borderWidth;
+    const bc = rgbaToCss(node.style.borderColor);
+    if (bw && bw > 0 && bc) decls["border"] = `${P(bw)} solid ${bc}`;
   }
   return decls;
 }
@@ -127,6 +137,12 @@ export function mapChildCss(
     if (node.text?.fontFamily) classDecls["font-family"] = node.text.fontFamily;
     if (node.text?.lineHeightPx != null)
       classDecls["line-height"] = P(node.text.lineHeightPx || 0);
+    const colorCss = rgbaToCss(node.text?.color || undefined);
+    if (colorCss) classDecls["color"] = colorCss;
+    if (node.text?.letterSpacing != null)
+      classDecls["letter-spacing"] = P(node.text.letterSpacing);
+    if (node.text?.fontStyle && /italic/i.test(node.text.fontStyle))
+      classDecls["font-style"] = "italic";
   }
   if (node.type === "text" && node.text && node.text.textAlign) {
     classDecls["text-align"] =

@@ -1,6 +1,11 @@
 export type RGBA = { r: number; g: number; b: number; a: number };
 
-export type AxisAlign = "start" | "center" | "end" | "space-between" | "stretch";
+export type AxisAlign =
+  | "start"
+  | "center"
+  | "end"
+  | "space-between"
+  | "stretch";
 
 export type LayoutMode = "none" | "horizontal" | "vertical";
 
@@ -13,7 +18,12 @@ export type NormalizedConstraints = {
 
 export type BorderRadius =
   | number
-  | { topLeft: number; topRight: number; bottomRight: number; bottomLeft: number };
+  | {
+      topLeft: number;
+      topRight: number;
+      bottomRight: number;
+      bottomLeft: number;
+    };
 
 export type NormalizedNodeType =
   | "root"
@@ -48,6 +58,13 @@ export type NormalizedLayout = {
 export type NormalizedStyle = {
   background?: RGBA | null;
   borderRadius?: BorderRadius | null;
+  backgroundGradient?: {
+    type: "linear";
+    angleDeg: number;
+    stops: { color: RGBA; position: number }[];
+  } | null;
+  borderColor?: RGBA | null;
+  borderWidth?: number | null;
 };
 
 export type NormalizedText = {
@@ -57,6 +74,9 @@ export type NormalizedText = {
   fontWeight?: number;
   textAlign?: "left" | "center" | "right" | "justified";
   lineHeightPx?: number | null;
+  color?: RGBA | null;
+  letterSpacing?: number | null;
+  fontStyle?: string | null;
 };
 
 export type NormalizedNode = {

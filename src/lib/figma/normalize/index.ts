@@ -68,10 +68,11 @@ function normalizeFrameLike(
         height: node.absoluteBoundingBox.height,
       }
     : undefined;
-  const style = {
-    background: toRgba(node.backgroundColor) || null,
-    borderRadius: mapBorderRadius(node.cornerRadius, node.rectangleCornerRadii),
-  } as const;
+  const style = buildStyleFromPaints(node as any);
+  style.borderRadius = mapBorderRadius(
+    node.cornerRadius,
+    node.rectangleCornerRadii
+  );
   return {
     id: node.id,
     name: node.name,
@@ -112,7 +113,7 @@ function normalizeLeaf(node: FigmaNode): NormalizedNode {
         }
       : undefined,
     style: {
-      background: toRgba((node as any).backgroundColor) || null,
+      ...buildStyleFromPaints(node as any),
       borderRadius: mapBorderRadius(
         (node as any).cornerRadius,
         (node as any).rectangleCornerRadii
@@ -126,6 +127,9 @@ function normalizeLeaf(node: FigmaNode): NormalizedNode {
       fontSize: node.style?.fontSize,
       fontWeight: node.style?.fontWeight,
       lineHeightPx: node.style?.lineHeightPx ?? null,
+      color: pickSolidTextFill(node.fills) || null,
+      letterSpacing: node.style?.letterSpacing ?? null,
+      fontStyle: node.style?.fontStyle ?? null,
       textAlign:
         node.textAlignHorizontal === "CENTER"
           ? "center"
@@ -193,3 +197,75 @@ export function normalizeFileWithIndex(file: FigmaFile): NormalizedOutput {
 }
 
 export { createIndex };
+
+function buildStyleFromPaints(node: any) {
+  const fills = Array.isArray(node.fills) ? node.fills : [];
+  const strokes = Array.isArray(node.strokes) ? node.strokes : [];
+  const style: any = {
+    background: toRgba(node.backgroundColor) || null,
+    backgroundGradient: null,
+    borderColor: null,
+    borderWidth: node.strokeWeight ?? null,
+  };
+  const firstVisible = fills.find((p: any) => p && p.visible !== false);
+  if (firstVisible) {
+    if (firstVisible.type === "SOLID" && firstVisible.color) {
+      const c = toRgba(firstVisible.color);
+      if (c)
+        style.background = {
+          r: c.r,
+          g: c.g,
+          b: c.b,
+          a: (firstVisible.opacity ?? 1) * c.a,
+        };
+    } else if (
+      firstVisible.type === "GRADIENT_LINEAR" &&
+      firstVisible.gradientHandlePositions &&
+      firstVisible.gradientHandlePositions.length >= 2 &&
+      Array.isArray(firstVisible.gradientStops)
+    ) {
+      const h0 = firstVisible.gradientHandlePositions[0];
+      const h1 = firstVisible.gradientHandlePositions[1];
+      const dx = h1.x - h0.x;
+      const dy = h1.y - h0.y;
+      const angleRad = Math.atan2(dy, dx);
+      const angleDeg = (angleRad * 180) / Math.PI;
+      const stops = firstVisible.gradientStops
+        .map((s: any) => ({ color: toRgba(s.color), position: s.position }))
+        .filter((s: any) => !!s.color);
+      if (stops.length > 0)
+        style.backgroundGradient = {
+          type: "linear",
+          angleDeg,
+          stops: stops as any,
+        };
+      style.background = null;
+    }
+  }
+  const firstStroke = strokes.find(
+    (p: any) => p && p.visible !== false && p.type === "SOLID" && p.color
+  );
+  if (firstStroke) {
+    const c = toRgba(firstStroke.color);
+    if (c)
+      style.borderColor = {
+        r: c.r,
+        g: c.g,
+        b: c.b,
+        a: (firstStroke.opacity ?? 1) * c.a,
+      };
+  }
+  return style;
+}
+
+function pickSolidTextFill(fills?: any[]): any | null {
+  if (!Array.isArray(fills)) return null;
+  const p = fills.find(
+    (f) => f && f.visible !== false && f.type === "SOLID" && f.color
+  );
+  if (!p) return null;
+  const c = toRgba(p.color);
+  if (!c) return null;
+  const a = (p.opacity ?? 1) * c.a;
+  return { r: c.r, g: c.g, b: c.b, a };
+}

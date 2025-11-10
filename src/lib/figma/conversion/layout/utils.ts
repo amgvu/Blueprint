@@ -38,6 +38,25 @@ export function borderRadiusToCss(
   return `${P(topLeft)} ${P(topRight)} ${P(bottomRight)} ${P(bottomLeft)}`;
 }
 
+export function gradientToCss(g?: {
+  type: "linear";
+  angleDeg: number;
+  stops: { color: RGBA; position: number }[];
+}): string | undefined {
+  if (
+    !g ||
+    g.type !== "linear" ||
+    !Array.isArray(g.stops) ||
+    g.stops.length === 0
+  )
+    return undefined;
+  const angle = `${Math.round(g.angleDeg)}deg`;
+  const parts = g.stops.map(
+    (s) => `${rgbaToCss(s.color)} ${Math.round((s.position || 0) * 100)}%`
+  );
+  return `linear-gradient(${angle}, ${parts.join(", ")})`;
+}
+
 export function alignToJustify(v: string): string {
   if (v === "center") return "center";
   if (v === "end") return "flex-end";
