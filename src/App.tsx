@@ -74,11 +74,11 @@ function App() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
         <div>
           <h2 className="text-sm font-medium mb-1">HTML</h2>
-          <pre className="font-mono text-xs bg-zinc-900 text-zinc-200 p-3 rounded max-h-96 overflow-auto whitespace-pre-wrap break-words">
+          <pre className="font-mono text-xs bg-zinc-900 text-zinc-200 p-3 rounded max-h-96 overflow-auto whitespace-pre-wrap">
             {html}
           </pre>
           <h2 className="text-sm font-medium mt-3 mb-1">CSS</h2>
-          <pre className="font-mono text-xs bg-zinc-900 text-zinc-200 p-3 rounded max-h-96 overflow-auto whitespace-pre-wrap break-words">
+          <pre className="font-mono text-xs bg-zinc-900 text-zinc-200 p-3 rounded max-h-96 overflow-auto whitespace-pre-wrap">
             {css}
           </pre>
         </div>

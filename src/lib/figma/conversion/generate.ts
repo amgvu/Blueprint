@@ -5,6 +5,8 @@ import {
   mapChildCss,
   computeParentsNeedingRelative,
 } from "./layout";
+import type { ConversionOptions } from "./layout";
+export type { ConversionOptions } from "./layout";
 
 type RenderNode = {
   id: string;
@@ -40,14 +42,23 @@ class ClassRegistry {
   }
 }
 
-export function generateFromIndex(index: NormalizedIndex): {
+export function generateFromIndex(
+  index: NormalizedIndex,
+  options?: ConversionOptions
+): {
   html: string;
   css: string;
 } {
   const registry = new ClassRegistry();
+  const opts: Required<ConversionOptions> = {
+    canvasCentering: true,
+    preserveFractionalPixels: false,
+    centeredTextMode: "auto",
+    ...(options || {}),
+  } as any;
   const needsRelative = computeParentsNeedingRelative(index);
   const root =
-    buildRenderTree(index, index.rootId, registry, needsRelative) ||
+    buildRenderTree(index, index.rootId, registry, needsRelative, null, opts) ||
     {
       id: index.rootId,
       tag: "div",
@@ -65,14 +76,15 @@ function buildRenderTree(
   id: string,
   registry: ClassRegistry,
   needsRelative: Set<string>,
-  parentId: string | null = null
+  parentId: string | null = null,
+  opts: ConversionOptions = {}
 ): RenderNode | null {
   const node = index.nodes[id];
   const tag = pickTag(node.type);
-  const containerDecls = mapFlexContainerCss(index, id);
+  const containerDecls = mapFlexContainerCss(index, id, opts);
   if (needsRelative.has(id) && containerDecls.display !== "grid")
     containerDecls.position = "relative";
-  const { classDecls, inlineDecls } = mapChildCss(index, id, parentId);
+  const { classDecls, inlineDecls } = mapChildCss(index, id, parentId, opts);
 
   const classA = registry.register(containerDecls);
   const classB = registry.register(classDecls);
@@ -86,7 +98,7 @@ function buildRenderTree(
 
   const childIds = index.children[id] || [];
   const children = childIds
-    .map((cid) => buildRenderTree(index, cid, registry, needsRelative, id))
+    .map((cid) => buildRenderTree(index, cid, registry, needsRelative, id, opts))
     .filter(Boolean) as RenderNode[];
 
   const hasInline = Object.keys(inlineDecls).length > 0;
