@@ -194,7 +194,7 @@ describe("text and absolute", () => {
     expect(html.includes("height:")).toBe(false);
   });
 
-  test("Text typography mapping applied (size/weight/family/line-height)", () => {
+  test("Text typography mapping applied (size/weight/line-height + default sans)", () => {
     const t = textNode("t-typo", "Hello");
     (t as any).text.fontSize = 16;
     (t as any).text.fontWeight = 700;
@@ -205,7 +205,7 @@ describe("text and absolute", () => {
     const { css } = generateFromIndex(index);
     expect(css.includes("font-size:16px;"));
     expect(css.includes("font-weight:700;"));
-    expect(css.includes("font-family:Inter;"));
+    expect(css.includes("font-family:system-ui") || css.includes("font-family:-apple-system"));
     expect(css.includes("line-height:20px;"));
   });
 });

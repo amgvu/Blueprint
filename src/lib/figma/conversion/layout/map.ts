@@ -7,6 +7,7 @@ import {
   alignToItems,
   alignSelfToCss,
   gradientToCss,
+  sansFonts,
 } from "./utils";
 import type { ConversionOptions, CssDecls } from "./types";
 
@@ -134,7 +135,7 @@ export function mapChildCss(
       classDecls["font-size"] = P(node.text.fontSize);
     if (node.text?.fontWeight != null)
       classDecls["font-weight"] = `${node.text.fontWeight}`;
-    if (node.text?.fontFamily) classDecls["font-family"] = node.text.fontFamily;
+    classDecls["font-family"] = sansFonts;
     if (node.text?.lineHeightPx != null)
       classDecls["line-height"] = P(node.text.lineHeightPx || 0);
     const colorCss = rgbaToCss(node.text?.color || undefined);

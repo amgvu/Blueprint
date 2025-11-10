@@ -77,3 +77,16 @@ export function alignSelfToCss(v: string): string {
   if (v === "stretch") return "stretch";
   return "flex-start";
 }
+
+export const sansFonts =
+  "system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, 'Apple Color Emoji', 'Segoe UI Emoji', sans-serif";
+
+export function fontFamilyWithSansFallback(
+  name?: string | null
+): string | undefined {
+  if (!name || typeof name !== "string") return undefined;
+  const trimmed = name.trim();
+  if (!trimmed) return undefined;
+  const quoted = /\s/.test(trimmed) ? `'${trimmed}'` : trimmed;
+  return `${quoted}, ${sansFonts}`;
+}

@@ -66,9 +66,9 @@ describe("snapshot: minimal sign-in element", () => {
       "<div class=\"c1 c2\">\n  <p class=\"c3\" style=\"height:37px;left:16px;position:absolute;top:100px;width:361px;\">Forgot password</p>\n</div>"
     `);
     expect(css).toMatchInlineSnapshot(`
-      ".c1{align-items:flex-start;display:flex;flex-direction:column;justify-content:flex-start;position:relative;}
+      ".c1{align-items:flex-start;display:flex;flex-direction:column;font-family:system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, 'Apple Color Emoji', 'Segoe UI Emoji', sans-serif;justify-content:flex-start;position:relative;}
       .c2{height:200px;width:393px;}
-      .c3{margin:0 auto;text-align:center;width:361px;}"
+      .c3{font-family:system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, 'Apple Color Emoji', 'Segoe UI Emoji', sans-serif;margin:0 auto;text-align:center;width:361px;}"
     `);
   });
 });
