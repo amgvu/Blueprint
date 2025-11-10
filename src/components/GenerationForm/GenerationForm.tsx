@@ -91,7 +91,7 @@ export default function GenerationForm({
             ) : q ? (
               <motion.div
                 key={q.id}
-                initial={{ opacity: 0, x: direction > 0 ? 80 : -80 }}
+                initial={{ opacity: 0, x: direction > 0 ? -80 : 80 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: direction > 0 ? -80 : 80 }}
                 transition={{ duration: 0.25, ease: "easeOut" }}
@@ -114,7 +114,6 @@ export default function GenerationForm({
               </motion.div>
             ) : null}
           </AnimatePresence>
-          {/* Navigation buttons are now rendered inside QuestionLoader */}
         </div>
       </main>
     </motion.div>
