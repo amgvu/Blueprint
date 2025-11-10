@@ -8,6 +8,8 @@ import type {
   SizeIntent,
   NormalizedConstraints,
 } from "../types/normalized.types";
+import type { FigmaNode } from "../../types/figma.types";
+import type { NormalizedSizing } from "../types/normalized.types";
 
 export function mapLayoutMode(m?: FigmaAutoLayoutMode): LayoutMode {
   if (m === "HORIZONTAL") return "horizontal";
@@ -73,4 +75,28 @@ export function mapConstraints(
       ? "top_bottom"
       : "scale";
   return { horizontal: h, vertical: v };
+}
+
+export function mapSizingFromNode(node: Pick<FigmaNode, "layoutSizingHorizontal" | "layoutSizingVertical" | "absoluteBoundingBox" | "layoutGrow" | "layoutAlign" | "layoutPositioning" | "constraints">): NormalizedSizing {
+  return {
+    width: mapSizeIntent(node.layoutSizingHorizontal),
+    height: mapSizeIntent(node.layoutSizingVertical),
+    widthPx: node.absoluteBoundingBox?.width,
+    heightPx: node.absoluteBoundingBox?.height,
+    grow: node.layoutGrow,
+    alignSelf: mapAlignSelf(node.layoutAlign),
+    position: node.layoutPositioning === "ABSOLUTE" ? "absolute" : "static",
+    constraints: mapConstraints(node.constraints),
+  };
+}
+
+export function mapAbsoluteFromNode(node: Pick<FigmaNode, "absoluteBoundingBox">): { x: number; y: number; width: number; height: number } | undefined {
+  return node.absoluteBoundingBox
+    ? {
+        x: node.absoluteBoundingBox.x,
+        y: node.absoluteBoundingBox.y,
+        width: node.absoluteBoundingBox.width,
+        height: node.absoluteBoundingBox.height,
+      }
+    : undefined;
 }
