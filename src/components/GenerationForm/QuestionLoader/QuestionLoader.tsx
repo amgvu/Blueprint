@@ -38,6 +38,7 @@ export function QuestionLoader({
       {question.description ? (
         <FieldDescription>{question.description}</FieldDescription>
       ) : null}
+
       <FieldContent>
         {renderControl({
           question,
@@ -47,6 +48,7 @@ export function QuestionLoader({
           disabled: !!disabled,
           onChange,
           inputClassName,
+          invalid: !!error,
         })}
         <FieldError errors={errorArray} />
       </FieldContent>
@@ -62,6 +64,7 @@ function renderControl({
   disabled,
   onChange,
   inputClassName,
+  invalid,
 }: {
   question: QuestionSchema;
   id: string;
@@ -70,6 +73,7 @@ function renderControl({
   disabled: boolean;
   onChange: (id: string, value: string) => void;
   inputClassName?: string;
+  invalid?: boolean;
 }) {
   const inputType =
     question.type === "password"
@@ -85,6 +89,7 @@ function renderControl({
       value={value}
       disabled={disabled}
       placeholder={question.placeholder}
+      aria-invalid={invalid ? true : undefined}
       onChange={(e) => onChange(name, e.target.value)}
       className={inputClassName}
     />

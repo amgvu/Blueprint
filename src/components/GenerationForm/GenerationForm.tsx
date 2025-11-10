@@ -1,7 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import { QuestionLoader } from "./QuestionLoader/QuestionLoader";
 import LoadingScreen from "@/components/GenerationForm/LoadingScreen";
 import type { QuestionSchema } from "./QuestionLoader/types";
@@ -108,11 +107,6 @@ export default function GenerationForm({
               </motion.div>
             ) : null}
           </AnimatePresence>
-          {!isSubmitting && error ? (
-            <Alert variant="destructive">
-              <AlertDescription>{error}</AlertDescription>
-            </Alert>
-          ) : null}
           {!isSubmitting ? (
             <div className="flex items-center justify-between pt-2 pb-6">
               {step > 0 ? (
