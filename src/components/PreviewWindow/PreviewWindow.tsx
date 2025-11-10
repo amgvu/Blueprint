@@ -14,6 +14,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { Highlight, themes } from "prism-react-renderer";
 
 export type PreviewWindowProps = {
   html: string;
@@ -92,18 +93,66 @@ export default function PreviewWindow({
                   </Tooltip>
                 </div>
               </div>
-              <TabsContent value="html" className="h-[calc(100%-2.5rem)]">
-                <ScrollArea className="h-full rounded-md border p-2">
-                  <pre className="font-mono text-xs whitespace-pre-wrap leading-relaxed">
-                    {html}
-                  </pre>
+              <TabsContent
+                value="html"
+                className="h-[calc(100%-2.5rem)]"
+                style={{
+                  backgroundColor: themes.vsDark.plain
+                    .backgroundColor as string,
+                  color: themes.vsDark.plain.color as string,
+                }}
+              >
+                <ScrollArea className="h-full rounded-md border p-0">
+                  <Highlight theme={themes.vsDark} code={html} language="html">
+                    {({ tokens, getLineProps, getTokenProps }) => (
+                      <pre
+                        className=" m-0 p-3 font-mono text-xs leading-relaxed whitespace-pre-wrap"
+                        style={{
+                          backgroundColor: "transparent",
+                          color: "inherit",
+                        }}
+                      >
+                        {tokens.map((line, i) => (
+                          <div key={i} {...getLineProps({ line })}>
+                            {line.map((token, key) => (
+                              <span key={key} {...getTokenProps({ token })} />
+                            ))}
+                          </div>
+                        ))}
+                      </pre>
+                    )}
+                  </Highlight>
                 </ScrollArea>
               </TabsContent>
-              <TabsContent value="css" className="h-[calc(100%-2.5rem)]">
-                <ScrollArea className="h-full rounded-md border p-2">
-                  <pre className="font-mono text-xs whitespace-pre-wrap leading-relaxed">
-                    {css}
-                  </pre>
+              <TabsContent
+                value="css"
+                className="h-[calc(100%-2.5rem)]"
+                style={{
+                  backgroundColor: themes.vsDark.plain
+                    .backgroundColor as string,
+                  color: themes.vsDark.plain.color as string,
+                }}
+              >
+                <ScrollArea className="h-full rounded-md border p-0">
+                  <Highlight theme={themes.vsDark} code={css} language="css">
+                    {({ tokens, getLineProps, getTokenProps }) => (
+                      <pre
+                        className="m-0 p-3 font-mono text-xs leading-relaxed whitespace-pre-wrap"
+                        style={{
+                          backgroundColor: "transparent",
+                          color: "inherit",
+                        }}
+                      >
+                        {tokens.map((line, i) => (
+                          <div key={i} {...getLineProps({ line })}>
+                            {line.map((token, key) => (
+                              <span key={key} {...getTokenProps({ token })} />
+                            ))}
+                          </div>
+                        ))}
+                      </pre>
+                    )}
+                  </Highlight>
                 </ScrollArea>
               </TabsContent>
             </Tabs>

@@ -87,7 +87,7 @@ function App() {
           transition={{ duration: 0.25, ease: "easeOut" }}
         >
           <div className="mb-2 flex items-center justify-between">
-            <h1 className="text-2xl font-semibold">Preview</h1>
+            <h1 className="text-2xl font-semibold">Converted Mockup Preview</h1>
             <div className="flex items-center gap-2">
               <Button variant="outline" onClick={() => setView("input")}>
                 Back to form
