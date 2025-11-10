@@ -2,7 +2,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { QuestionLoader } from "./QuestionLoader/QuestionLoader";
-import LoadingScreen from "@/components/GenerationForm/LoadingScreen";
+import LoadingScreen from "@/components/GenerationForm/QuestionLoader/LoadingScreen";
 import type { QuestionSchema } from "./QuestionLoader/types";
 import { useGenerationForm } from "./useGenerationForm";
 
