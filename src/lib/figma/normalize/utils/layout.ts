@@ -1,4 +1,7 @@
-import type { FigmaAutoLayoutMode, FigmaConstraints } from "../../types/figma.types";
+import type {
+  FigmaAutoLayoutMode,
+  FigmaConstraints,
+} from "../../types/figma.types";
 import type {
   AxisAlign,
   LayoutMode,
