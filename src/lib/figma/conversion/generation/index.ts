@@ -14,6 +14,7 @@ export function generateFromIndex(
     preserveFractionalPixels: false,
     centeredTextMode: "auto",
     forceAbsoluteUnderNone: true,
+    cssFormat: "compact",
     ...(options || {}),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } as any;
@@ -33,7 +34,7 @@ export function generateFromIndex(
     children: [],
   };
   const html = emitHtml(root, 0);
-  const css = registry.cssText();
+  const css = registry.cssText(opts.cssFormat);
   return { html, css };
 }
 

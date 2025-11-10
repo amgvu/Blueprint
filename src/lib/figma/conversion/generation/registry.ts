@@ -3,7 +3,7 @@ import { serializeDecls } from "./utils";
 export class ClassRegistry {
   private counter = 0;
   private byDecl: Map<string, string> = new Map();
-  private declByClass: Map<string, string> = new Map();
+  private declByClass: Map<string, Record<string, string>> = new Map();
 
   register(decls: Record<string, string> | undefined): string | null {
     if (!decls || Object.keys(decls).length === 0) return null;
@@ -12,15 +12,21 @@ export class ClassRegistry {
     if (existing) return existing;
     const name = `c${++this.counter}`;
     this.byDecl.set(key, name);
-    this.declByClass.set(name, key);
+    this.declByClass.set(name, decls);
     return name;
   }
 
-  cssText(): string {
+  cssText(format: "compact" | "pretty" = "compact"): string {
     const parts: string[] = [];
-    for (const [name, declStr] of this.declByClass.entries()) {
-      parts.push(`.${name}{${declStr}}`);
+    for (const [name, decls] of this.declByClass.entries()) {
+      if (format === "pretty") {
+        const keys = Object.keys(decls).sort();
+        const body = keys.map((k) => `  ${k}: ${decls[k]};`).join("\n");
+        parts.push(`.${name} {\n${body}\n}`);
+      } else {
+        parts.push(`.${name}{${serializeDecls(decls)}}`);
+      }
     }
-    return parts.join("\n");
+    return format === "pretty" ? parts.join("\n\n") : parts.join("\n");
   }
 }

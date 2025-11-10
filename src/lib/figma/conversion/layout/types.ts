@@ -5,4 +5,5 @@ export type ConversionOptions = {
   preserveFractionalPixels?: boolean;
   centeredTextMode?: "auto" | "constraints";
   forceAbsoluteUnderNone?: boolean;
+  cssFormat?: "compact" | "pretty";
 };

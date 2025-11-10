@@ -43,7 +43,7 @@ function App() {
           : await fetchFigmaFileFromEnv();
       const norm = normalizeFile(file);
       const index = createIndex(norm);
-      const { html, css } = generateFromIndex(index);
+      const { html, css } = generateFromIndex(index, { cssFormat: "pretty" });
       setHtml(html);
       setCss(css);
       await new Promise((r) => setTimeout(r, 2000));
