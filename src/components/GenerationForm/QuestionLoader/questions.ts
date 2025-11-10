@@ -1,4 +1,4 @@
-import type { QuestionSchema } from "@/components/QuestionLoader/types";
+import type { QuestionSchema } from "./types";
 
 export const generationQuestions: QuestionSchema[] = [
   {

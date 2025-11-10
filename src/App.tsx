@@ -1,7 +1,7 @@
 import "./App.css";
-import GenerationForm from "@/components/GenerationForm";
+import GenerationForm from "@/components/GenerationForm/GenerationForm";
 import { generationQuestions } from "@/components/GenerationForm/QuestionLoader/questions";
-import PreviewWindow from "@/components/PreviewWindow";
+import PreviewWindow from "@/components/PreviewWindow/PreviewWindow";
 import JSZip from "jszip";
 import { z } from "zod";
 import { useState } from "react";
@@ -46,7 +46,7 @@ function App() {
       const { html, css } = generateFromIndex(index, { cssFormat: "pretty" });
       setHtml(html);
       setCss(css);
-      await new Promise((r) => setTimeout(r, 2000));
+      await new Promise((r) => setTimeout(r, 1000));
       setView("results");
     } catch (e) {
       console.error(e);
@@ -84,7 +84,7 @@ function App() {
           className="px-6 py-6 space-y-4"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.3, ease: "easeOut" }}
+          transition={{ duration: 0.25, ease: "easeOut" }}
         >
           <div className="mb-2 flex items-center justify-between">
             <h1 className="text-2xl font-semibold">Preview</h1>

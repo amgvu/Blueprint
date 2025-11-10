@@ -3,7 +3,7 @@ import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { QuestionLoader } from "./QuestionLoader/QuestionLoader";
-import LoadingScreen from "@/components/LoadingScreen";
+import LoadingScreen from "@/components/GenerationForm/LoadingScreen";
 import type { QuestionSchema } from "./QuestionLoader/types";
 import { useGenerationForm } from "./useGenerationForm";
 
@@ -21,7 +21,7 @@ export type GenerationFormProps = {
   isSubmitting?: boolean;
 };
 
-export function GenerationForm({
+export default function GenerationForm({
   questions,
   initialValues,
   title = "Generate from Figma",
@@ -54,11 +54,16 @@ export function GenerationForm({
   });
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <motion.div
+      className="min-h-screen flex flex-col"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.25, ease: "easeOut" }}
+    >
       <div className="fixed inset-x-0 top-0 z-50">
         <Progress value={isSubmitting ? 100 : progress} />
       </div>
-      <header className="w-full px-6 flex items-end justify-between gap-4 pt-6">
+      <header className="w-full px-6 flex py-4 items-end justify-between gap-4 pt-6">
         <div className="min-w-0">
           <h1 className="text-lg font-medium">{title}</h1>
           <p className="text-muted-foreground text-sm">{description}</p>
@@ -128,8 +133,6 @@ export function GenerationForm({
           ) : null}
         </div>
       </main>
-    </div>
+    </motion.div>
   );
 }
-
-export default GenerationForm;
