@@ -15,12 +15,9 @@ import type {
 import type { NormalizedOutput } from "./types/normalized.types";
 import { toRgba } from "./utils/color";
 import {
-  mapAlignSelf,
   mapAxisAlignCross,
   mapAxisAlignMain,
   mapLayoutMode,
-  mapSizeIntent,
-  mapConstraints,
   mapSizingFromNode,
   mapAbsoluteFromNode,
 } from "./utils/layout";

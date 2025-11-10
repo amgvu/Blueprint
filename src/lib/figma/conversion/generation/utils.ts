@@ -33,10 +33,8 @@ export function isRenderableHtmlCandidate(
   classCount: number,
   inlineDecls: Record<string, string>
 ): boolean {
-  return (
-    (textContent && textContent.length > 0) ||
+  return ((textContent && textContent.length > 0) ||
     childrenCount > 0 ||
     classCount > 0 ||
-    hasInline(inlineDecls)
-  ) as boolean;
+    hasInline(inlineDecls)) as boolean;
 }

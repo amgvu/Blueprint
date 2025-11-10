@@ -77,7 +77,18 @@ export function mapConstraints(
   return { horizontal: h, vertical: v };
 }
 
-export function mapSizingFromNode(node: Pick<FigmaNode, "layoutSizingHorizontal" | "layoutSizingVertical" | "absoluteBoundingBox" | "layoutGrow" | "layoutAlign" | "layoutPositioning" | "constraints">): NormalizedSizing {
+export function mapSizingFromNode(
+  node: Pick<
+    FigmaNode,
+    | "layoutSizingHorizontal"
+    | "layoutSizingVertical"
+    | "absoluteBoundingBox"
+    | "layoutGrow"
+    | "layoutAlign"
+    | "layoutPositioning"
+    | "constraints"
+  >
+): NormalizedSizing {
   return {
     width: mapSizeIntent(node.layoutSizingHorizontal),
     height: mapSizeIntent(node.layoutSizingVertical),
@@ -90,7 +101,9 @@ export function mapSizingFromNode(node: Pick<FigmaNode, "layoutSizingHorizontal"
   };
 }
 
-export function mapAbsoluteFromNode(node: Pick<FigmaNode, "absoluteBoundingBox">): { x: number; y: number; width: number; height: number } | undefined {
+export function mapAbsoluteFromNode(
+  node: Pick<FigmaNode, "absoluteBoundingBox">
+): { x: number; y: number; width: number; height: number } | undefined {
   return node.absoluteBoundingBox
     ? {
         x: node.absoluteBoundingBox.x,
