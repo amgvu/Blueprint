@@ -1,6 +1,7 @@
 /* eslint-disable no-useless-escape */
 import type { NormalizedIndex } from "../../normalize/types/normalized.types";
 import { mapFlexContainerCss, mapChildCss } from "../layout";
+import { sansFonts } from "../layout/utils";
 import type { ConversionOptions } from "../layout";
 import { ClassRegistry } from "./registry";
 import {
@@ -23,6 +24,9 @@ export function buildRenderTree(
   const node = index.nodes[id];
   const tag = pickTag(node.type);
   const containerDecls = mapFlexContainerCss(index, id, opts);
+  if (!parentId) {
+    containerDecls["font-family"] = sansFonts;
+  }
   if (needsRelative.has(id) && containerDecls.display !== "grid")
     containerDecls.position = "relative";
   const { classDecls, inlineDecls } = mapChildCss(index, id, parentId, opts);
