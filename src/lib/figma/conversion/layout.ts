@@ -7,10 +7,16 @@ export type ConversionOptions = {
   canvasCentering?: boolean;
   preserveFractionalPixels?: boolean;
   centeredTextMode?: "auto" | "constraints";
+  forceAbsoluteUnderNone?: boolean;
 };
 
 function px(n: number | undefined | null, round = true): string {
-  const v = typeof n === "number" ? (round ? Math.round(n) : Math.round(n * 100) / 100) : 0;
+  const v =
+    typeof n === "number"
+      ? round
+        ? Math.round(n)
+        : Math.round(n * 100) / 100
+      : 0;
   return `${v}px`;
 }
 
@@ -30,8 +36,10 @@ export function borderRadiusToCss(
 ): string | undefined {
   if (b == null) return undefined;
   const P = toPx || ((n: number | undefined | null) => px(n));
-  if (typeof b === "number") return P(b);
+  if (typeof b === "number") return b === 0 ? undefined : P(b);
   const { topLeft, topRight, bottomRight, bottomLeft } = b;
+  const allZero = [topLeft, topRight, bottomRight, bottomLeft].every((n) => (n ?? 0) === 0);
+  if (allZero) return undefined;
   return `${P(topLeft)} ${P(topRight)} ${P(bottomRight)} ${P(bottomLeft)}`;
 }
 
@@ -42,7 +50,8 @@ export function mapFlexContainerCss(
 ): CssDecls {
   const node = index.nodes[id];
   const decls: CssDecls = {};
-  const P = (n: number | undefined | null) => px(n, !(opts.preserveFractionalPixels ?? false));
+  const P = (n: number | undefined | null) =>
+    px(n, !(opts.preserveFractionalPixels ?? false));
   if (
     node.type === "frame" ||
     node.type === "canvas" ||
@@ -65,7 +74,8 @@ export function mapFlexContainerCss(
         decls.gap = P(node.layout.gap);
       const p = node.layout.padding;
       if (p) {
-        const total = (p.top || 0) + (p.right || 0) + (p.bottom || 0) + (p.left || 0);
+        const total =
+          (p.top || 0) + (p.right || 0) + (p.bottom || 0) + (p.left || 0);
         if (total > 0)
           decls.padding = [P(p.top), P(p.right), P(p.bottom), P(p.left)].join(
             " "
@@ -102,7 +112,8 @@ export function mapChildCss(
   const inlineDecls: CssDecls = {};
 
   const parentLayout = parent?.layout?.mode;
-  const P = (n: number | undefined | null) => px(n, !(opts.preserveFractionalPixels ?? false));
+  const P = (n: number | undefined | null) =>
+    px(n, !(opts.preserveFractionalPixels ?? false));
 
   if (node.sizing.position !== "absolute") {
     if (node.sizing.width === "fixed" && node.sizing.widthPx != null)
@@ -112,7 +123,8 @@ export function mapChildCss(
 
     if (node.sizing.width === "fill") {
       if (parentLayout === "horizontal") {
-        const grow = node.sizing.grow && node.sizing.grow > 0 ? node.sizing.grow : 1;
+        const grow =
+          node.sizing.grow && node.sizing.grow > 0 ? node.sizing.grow : 1;
         classDecls["flex"] = `${grow} 1 0`;
       } else if (parentLayout === "vertical") {
         if (!node.sizing.alignSelf) classDecls["align-self"] = "stretch";
@@ -123,7 +135,8 @@ export function mapChildCss(
 
     if (node.sizing.height === "fill") {
       if (parentLayout === "vertical") {
-        const grow = node.sizing.grow && node.sizing.grow > 0 ? node.sizing.grow : 1;
+        const grow =
+          node.sizing.grow && node.sizing.grow > 0 ? node.sizing.grow : 1;
         classDecls["flex"] = `${grow} 1 0`;
       } else if (parentLayout === "horizontal") {
         if (!node.sizing.alignSelf) classDecls["align-self"] = "stretch";
@@ -145,8 +158,7 @@ export function mapChildCss(
       classDecls["font-size"] = P(node.text.fontSize);
     if (node.text?.fontWeight != null)
       classDecls["font-weight"] = `${node.text.fontWeight}`;
-    if (node.text?.fontFamily)
-      classDecls["font-family"] = node.text.fontFamily;
+    if (node.text?.fontFamily) classDecls["font-family"] = node.text.fontFamily;
     if (node.text?.lineHeightPx != null)
       classDecls["line-height"] = P(node.text.lineHeightPx || 0);
   }
@@ -162,7 +174,10 @@ export function mapChildCss(
     classDecls["white-space"] = "pre-line";
   }
 
-  if (node.type === "text" && (opts.centeredTextMode ?? "auto") !== "constraints") {
+  if (
+    node.type === "text" &&
+    (opts.centeredTextMode ?? "auto") !== "constraints"
+  ) {
     const wp = node.sizing.widthPx;
     const pw = parent?.sizing?.widthPx;
     const wantsCenter = node.text?.textAlign === "center";
@@ -173,7 +188,8 @@ export function mapChildCss(
   }
 
   const parentNone = parent && parent.layout?.mode === "none";
-  const shouldAbsolute = node.sizing.position === "absolute" || !!parentNone;
+  const shouldAbsolute =
+    node.sizing.position === "absolute" || (!!parentNone && (opts.forceAbsoluteUnderNone ?? true));
   if (shouldAbsolute && node.absolute) {
     inlineDecls.position = "absolute";
     const pId = parentId ? parentId : null;
@@ -197,11 +213,19 @@ export function mapChildCss(
         if (constraints?.horizontal === "center") {
           inlineDecls.left = P(expectedCenteredLeft);
         } else if (constraints?.horizontal === "left_right") {
-          const right = parentAbs.x + parentAbs.width - padR - (childAbs.x + childAbs.width);
+          const right =
+            parentAbs.x +
+            parentAbs.width -
+            padR -
+            (childAbs.x + childAbs.width);
           inlineDecls.left = P(currentLeft);
           inlineDecls.right = P(right);
         } else if (constraints?.horizontal === "right") {
-          const right = parentAbs.x + parentAbs.width - padR - (childAbs.x + childAbs.width);
+          const right =
+            parentAbs.x +
+            parentAbs.width -
+            padR -
+            (childAbs.x + childAbs.width);
           inlineDecls.right = P(right);
         } else {
           if (node.type === "text") {
@@ -213,7 +237,8 @@ export function mapChildCss(
               inlineDecls.left = P(expectedCenteredLeft);
               classDecls["text-align"] = "center";
             } else {
-              if (node.text?.textAlign === "center") classDecls["text-align"] = "center";
+              if (node.text?.textAlign === "center")
+                classDecls["text-align"] = "center";
               inlineDecls.left = P(currentLeft);
             }
           } else {
@@ -224,16 +249,25 @@ export function mapChildCss(
           const padT = parent?.layout?.padding?.top ?? 0;
           const padB = parent?.layout?.padding?.bottom ?? 0;
           const contentHeight = parentAbs.height - padT - padB;
-          const expectedCenteredTop = padT + (contentHeight - childAbs.height) / 2;
+          const expectedCenteredTop =
+            padT + (contentHeight - childAbs.height) / 2;
           inlineDecls.top = P(expectedCenteredTop);
         } else if (constraints?.vertical === "top_bottom") {
           const padB = parent?.layout?.padding?.bottom ?? 0;
-          const bottom = parentAbs.y + parentAbs.height - padB - (childAbs.y + childAbs.height);
+          const bottom =
+            parentAbs.y +
+            parentAbs.height -
+            padB -
+            (childAbs.y + childAbs.height);
           inlineDecls.top = topPx;
           inlineDecls.bottom = P(bottom);
         } else if (constraints?.vertical === "bottom") {
           const padB = parent?.layout?.padding?.bottom ?? 0;
-          const bottom = parentAbs.y + parentAbs.height - padB - (childAbs.y + childAbs.height);
+          const bottom =
+            parentAbs.y +
+            parentAbs.height -
+            padB -
+            (childAbs.y + childAbs.height);
           inlineDecls.bottom = P(bottom);
         } else {
           inlineDecls.top = topPx;
@@ -250,7 +284,8 @@ export function mapChildCss(
 }
 
 export function computeParentsNeedingRelative(
-  index: NormalizedIndex
+  index: NormalizedIndex,
+  opts: ConversionOptions = {}
 ): Set<string> {
   const set = new Set<string>();
   for (const id of index.order) {
@@ -259,12 +294,16 @@ export function computeParentsNeedingRelative(
       const parent = index.parents[id];
       if (parent) set.add(parent);
     }
-    if (
-      node.layout?.mode === "none" &&
-      index.children[id] &&
-      index.children[id].length > 0
-    ) {
-      set.add(id);
+    if (node.layout?.mode === "none") {
+      const childIds = index.children[id] || [];
+      const hasAbsChild = childIds.some((cid) => {
+        const c = index.nodes[cid];
+        if (!c) return false;
+        if (c.sizing.position === "absolute") return true;
+        if ((opts.forceAbsoluteUnderNone ?? true) && !!c.absolute) return true;
+        return false;
+      });
+      if (hasAbsChild) set.add(id);
     }
   }
   return set;

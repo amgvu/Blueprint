@@ -54,18 +54,25 @@ export function generateFromIndex(
     canvasCentering: true,
     preserveFractionalPixels: false,
     centeredTextMode: "auto",
+    forceAbsoluteUnderNone: true,
     ...(options || {}),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } as any;
-  const needsRelative = computeParentsNeedingRelative(index);
-  const root =
-    buildRenderTree(index, index.rootId, registry, needsRelative, null, opts) ||
-    {
-      id: index.rootId,
-      tag: "div",
-      classNames: [],
-      inline: {},
-      children: [],
-    };
+  const needsRelative = computeParentsNeedingRelative(index, opts);
+  const root = buildRenderTree(
+    index,
+    index.rootId,
+    registry,
+    needsRelative,
+    null,
+    opts
+  ) || {
+    id: index.rootId,
+    tag: "div",
+    classNames: [],
+    inline: {},
+    children: [],
+  };
   const html = emitHtml(root, 0);
   const css = registry.cssText();
   return { html, css };
@@ -90,7 +97,8 @@ function buildRenderTree(
   const classB = registry.register(classDecls);
   const classNames = [classA, classB].filter(Boolean) as string[];
 
-  const textContentRaw = node.type === "text" ? node.text?.characters : undefined;
+  const textContentRaw =
+    node.type === "text" ? node.text?.characters : undefined;
   const textContent =
     typeof textContentRaw === "string" && textContentRaw.trim().length > 0
       ? textContentRaw
@@ -98,7 +106,9 @@ function buildRenderTree(
 
   const childIds = index.children[id] || [];
   const children = childIds
-    .map((cid) => buildRenderTree(index, cid, registry, needsRelative, id, opts))
+    .map((cid) =>
+      buildRenderTree(index, cid, registry, needsRelative, id, opts)
+    )
     .filter(Boolean) as RenderNode[];
 
   const hasInline = Object.keys(inlineDecls).length > 0;
