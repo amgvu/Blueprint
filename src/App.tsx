@@ -1,4 +1,6 @@
-import { useMemo, useState } from "react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable no-useless-escape */
+import { useEffect, useMemo, useRef, useState } from "react";
 import "./App.css";
 import {
   fetchFigmaFileFromEnv,
@@ -20,11 +22,45 @@ function App() {
     import.meta.env?.VITE_FIGMA_FILE_URL || ""
   );
 
+  const iframeRef = useRef<HTMLIFrameElement | null>(null);
+
   const srcDoc = useMemo(() => {
     if (!html) return "";
-    const style = `<style>${css}</style>`;
-    return `${style}${html}`;
+    const base = `html,body{margin:0;padding:0;background:transparent;}`;
+    const cssText = `<style>${base}</style><style>${css}</style>`;
+    const script = `
+      <script>
+        (function(){
+          function send(){
+            try{
+              var h = Math.max(
+                document.body.scrollHeight,
+                document.documentElement.scrollHeight,
+                document.body.offsetHeight,
+                document.documentElement.offsetHeight
+              );
+              parent.postMessage({ __figmaPreviewHeight: h }, '*');
+            }catch(e){}
+          }
+          new ResizeObserver(send).observe(document.body);
+          window.addEventListener('load', send);
+          setTimeout(send, 0);
+        })();
+      <\/script>`;
+    return `<!DOCTYPE html><html><head><meta charset=\"utf-8\">${cssText}</head><body>${html}${script}</body></html>`;
   }, [html, css]);
+
+  useEffect(() => {
+    function onMessage(e: MessageEvent) {
+      const data = e.data as any;
+      if (data && typeof data.__figmaPreviewHeight === "number") {
+        const h = Math.max(0, Math.round(data.__figmaPreviewHeight));
+        if (iframeRef.current) iframeRef.current.style.height = `${h}px`;
+      }
+    }
+    window.addEventListener("message", onMessage);
+    return () => window.removeEventListener("message", onMessage);
+  }, []);
 
   async function handleGenerate() {
     setError(null);
@@ -86,8 +122,10 @@ function App() {
           <h2 className="text-sm font-medium mb-1">Preview</h2>
           <iframe
             title="preview"
+            ref={iframeRef}
             srcDoc={srcDoc}
-            className="w-full min-h-[600px] border border-zinc-700 rounded bg-white"
+            className="w-full border border-zinc-700 rounded bg-white"
+            style={{ height: html ? 0 : undefined }}
           />
         </div>
       </div>
