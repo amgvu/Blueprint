@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { BorderRadius } from "../types/normalized.types";
 import { toRgba } from "./color";
 

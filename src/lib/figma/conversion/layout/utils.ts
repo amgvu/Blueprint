@@ -90,3 +90,41 @@ export function fontFamilyWithSansFallback(
   const quoted = /\s/.test(trimmed) ? `'${trimmed}'` : trimmed;
   return `${quoted}, ${sansFonts}`;
 }
+
+export function formatPaddingDecl(
+  p?: { top: number; right: number; bottom: number; left: number },
+  toPx: (n: number | undefined | null) => string = px
+): string | undefined {
+  if (!p) return undefined;
+  const total = (p.top || 0) + (p.right || 0) + (p.bottom || 0) + (p.left || 0);
+  if (total <= 0) return undefined;
+  return [toPx(p.top), toPx(p.right), toPx(p.bottom), toPx(p.left)].join(" ");
+}
+
+type Box = { x: number; y: number; width: number; height: number };
+
+export function computeRightOffset(
+  parent: Box,
+  child: Box,
+  padRight: number
+): number {
+  return parent.x + parent.width - padRight - (child.x + child.width);
+}
+
+export function computeBottomOffset(
+  parent: Box,
+  child: Box,
+  padBottom: number
+): number {
+  return parent.y + parent.height - padBottom - (child.y + child.height);
+}
+
+export function isHorizCenteredByGeometry(
+  currentLeft: number,
+  expectedLeft: number,
+  tolerance: number = 2
+): boolean {
+  return (
+    Math.abs(Math.round(currentLeft) - Math.round(expectedLeft)) <= tolerance
+  );
+}

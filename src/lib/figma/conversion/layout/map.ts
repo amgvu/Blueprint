@@ -8,6 +8,10 @@ import {
   alignSelfToCss,
   gradientToCss,
   sansFonts,
+  formatPaddingDecl,
+  computeRightOffset,
+  computeBottomOffset,
+  isHorizCenteredByGeometry,
 } from "./utils";
 import type { ConversionOptions, CssDecls } from "./types";
 
@@ -40,15 +44,8 @@ export function mapFlexContainerCss(
         node.layout.mode === "horizontal" ? "row" : "column";
       if (node.layout.gap != null && node.layout.gap > 0)
         decls.gap = P(node.layout.gap);
-      const p = node.layout.padding;
-      if (p) {
-        const total =
-          (p.top || 0) + (p.right || 0) + (p.bottom || 0) + (p.left || 0);
-        if (total > 0)
-          decls.padding = [P(p.top), P(p.right), P(p.bottom), P(p.left)].join(
-            " "
-          );
-      }
+      const padDecl = formatPaddingDecl(node.layout.padding, P);
+      if (padDecl) decls.padding = padDecl;
       if (node.layout.align) {
         if (node.layout.align.main)
           decls["justify-content"] = alignToJustify(node.layout.align.main);
@@ -186,10 +183,10 @@ export function mapChildCss(
         const currentLeft = childAbs.x - parentAbs.x;
         const contentWidth = parentAbs.width - padL - padR;
         const expectedCenteredLeft = padL + (contentWidth - childAbs.width) / 2;
-        const isGeomCentered =
-          Math.abs(
-            Math.round(currentLeft) - Math.round(expectedCenteredLeft)
-          ) <= 2;
+        const isGeomCentered = isHorizCenteredByGeometry(
+          currentLeft,
+          expectedCenteredLeft
+        );
 
         const constraints = node.sizing.constraints;
         const topPx = P(childAbs.y - parentAbs.y);
@@ -197,19 +194,11 @@ export function mapChildCss(
         if (constraints?.horizontal === "center") {
           inlineDecls.left = P(expectedCenteredLeft);
         } else if (constraints?.horizontal === "left_right") {
-          const right =
-            parentAbs.x +
-            parentAbs.width -
-            padR -
-            (childAbs.x + childAbs.width);
+          const right = computeRightOffset(parentAbs, childAbs, padR);
           inlineDecls.left = P(currentLeft);
           inlineDecls.right = P(right);
         } else if (constraints?.horizontal === "right") {
-          const right =
-            parentAbs.x +
-            parentAbs.width -
-            padR -
-            (childAbs.x + childAbs.width);
+          const right = computeRightOffset(parentAbs, childAbs, padR);
           inlineDecls.right = P(right);
         } else {
           if (node.type === "text") {
@@ -238,20 +227,12 @@ export function mapChildCss(
           inlineDecls.top = P(expectedCenteredTop);
         } else if (constraints?.vertical === "top_bottom") {
           const padB = parent?.layout?.padding?.bottom ?? 0;
-          const bottom =
-            parentAbs.y +
-            parentAbs.height -
-            padB -
-            (childAbs.y + childAbs.height);
+          const bottom = computeBottomOffset(parentAbs, childAbs, padB);
           inlineDecls.top = topPx;
           inlineDecls.bottom = P(bottom);
         } else if (constraints?.vertical === "bottom") {
           const padB = parent?.layout?.padding?.bottom ?? 0;
-          const bottom =
-            parentAbs.y +
-            parentAbs.height -
-            padB -
-            (childAbs.y + childAbs.height);
+          const bottom = computeBottomOffset(parentAbs, childAbs, padB);
           inlineDecls.bottom = P(bottom);
         } else {
           inlineDecls.top = topPx;
