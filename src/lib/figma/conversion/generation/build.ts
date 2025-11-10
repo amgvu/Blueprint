@@ -17,9 +17,6 @@ export function buildRenderTree(
   const node = index.nodes[id];
   const tag = pickTag(node.type);
   const containerDecls = mapFlexContainerCss(index, id, opts);
-  if (id === index.rootId) {
-    containerDecls["font-family"] = "system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, 'Apple Color Emoji', 'Segoe UI Emoji', sans-serif";
-  }
   if (needsRelative.has(id) && containerDecls.display !== "grid")
     containerDecls.position = "relative";
   const { classDecls, inlineDecls } = mapChildCss(index, id, parentId, opts);

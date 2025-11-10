@@ -29,7 +29,7 @@ exports[`snapshot: full sign-in screen > generates expected HTML and CSS 1`] = `
 `;
 
 exports[`snapshot: full sign-in screen > generates expected HTML and CSS 2`] = `
-".c1{align-items:center;background-color:rgba(30, 30, 30, 1);display:flex;font-family:system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, 'Apple Color Emoji', 'Segoe UI Emoji', sans-serif;justify-content:center;min-height:100vh;width:100%;}
+".c1{align-items:center;background-color:rgba(30, 30, 30, 1);display:flex;justify-content:center;min-height:100vh;width:100%;}
 .c2{position:relative;}
 .c3{height:852px;width:393px;}
 .c4{background-color:rgba(250, 250, 250, 1);border-radius:32px;position:relative;}
