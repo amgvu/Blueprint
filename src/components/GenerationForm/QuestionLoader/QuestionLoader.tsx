@@ -8,10 +8,7 @@ import {
   FieldError,
   FieldLabel,
 } from "@/components/ui/field";
-import type {
-  QuestionSchema,
-  QuestionLoaderProps,
-} from "@/components/QuestionLoader/types";
+import type { QuestionSchema, QuestionLoaderProps } from "./types";
 
 export function QuestionLoader({
   question,
