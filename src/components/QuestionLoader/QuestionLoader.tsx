@@ -19,6 +19,7 @@ export function QuestionLoader({
   onChange,
   error,
   disabled,
+  inputClassName,
 }: QuestionLoaderProps) {
   const inputId = React.useId();
   const name = question.id;
@@ -48,6 +49,7 @@ export function QuestionLoader({
           value: value ?? "",
           disabled: !!disabled,
           onChange,
+          inputClassName,
         })}
         <FieldError errors={errorArray} />
       </FieldContent>
@@ -62,6 +64,7 @@ function renderControl({
   value,
   disabled,
   onChange,
+  inputClassName,
 }: {
   question: QuestionSchema;
   id: string;
@@ -69,6 +72,7 @@ function renderControl({
   value: string;
   disabled: boolean;
   onChange: (id: string, value: string) => void;
+  inputClassName?: string;
 }) {
   const inputType =
     question.type === "password"
@@ -85,6 +89,7 @@ function renderControl({
       disabled={disabled}
       placeholder={question.placeholder}
       onChange={(e) => onChange(name, e.target.value)}
+      className={inputClassName}
     />
   );
 }

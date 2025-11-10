@@ -15,4 +15,5 @@ export type QuestionLoaderProps = {
   onChange: (id: string, value: QuestionValue) => void;
   error?: string | Array<{ message?: string } | undefined>;
   disabled?: boolean;
+  inputClassName?: string;
 };
