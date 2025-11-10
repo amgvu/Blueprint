@@ -3,7 +3,13 @@ import type { NormalizedIndex } from "../../normalize/types/normalized.types";
 import { mapFlexContainerCss, mapChildCss } from "../layout";
 import type { ConversionOptions } from "../layout";
 import { ClassRegistry } from "./registry";
-import { serializeDecls, escapeHtml } from "./utils";
+import {
+  serializeDecls,
+  escapeHtml,
+  pickTag,
+  combineClasses,
+  isRenderableHtmlCandidate,
+} from "./utils";
 import type { RenderNode } from "./types";
 
 export function buildRenderTree(
@@ -23,7 +29,7 @@ export function buildRenderTree(
 
   const classA = registry.register(containerDecls);
   const classB = registry.register(classDecls);
-  const classNames = [classA, classB].filter(Boolean) as string[];
+  const classNames = combineClasses(classA, classB);
 
   const textContentRaw =
     node.type === "text" ? node.text?.characters : undefined;
@@ -39,12 +45,12 @@ export function buildRenderTree(
     )
     .filter(Boolean) as RenderNode[];
 
-  const hasInline = Object.keys(inlineDecls).length > 0;
-  const isRenderable =
-    (textContent && textContent.length > 0) ||
-    children.length > 0 ||
-    classNames.length > 0 ||
-    hasInline;
+  const isRenderable = isRenderableHtmlCandidate(
+    textContent,
+    children.length,
+    classNames.length,
+    inlineDecls
+  );
   if (!isRenderable) return null;
 
   return { id, tag, classNames, inline: inlineDecls, textContent, children };
@@ -67,9 +73,4 @@ export function emitHtml(node: RenderNode, depth: number): string {
       "\n" +
       pad;
   return `${pad}<${node.tag}${cls}${styleStr}>${inner}</${node.tag}>`;
-}
-
-function pickTag(type: string): string {
-  if (type === "text") return "p";
-  return "div";
 }
