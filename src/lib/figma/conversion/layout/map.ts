@@ -31,6 +31,9 @@ export function mapFlexContainerCss(
     node.type === "component" ||
     node.type === "instance"
   ) {
+    if (node.type === "canvas") {
+      decls["font-family"] = sansFonts;
+    }
     if (node.type === "canvas" && (opts.canvasCentering ?? true)) {
       decls.display = "flex";
       decls["justify-content"] = "center";
@@ -132,7 +135,6 @@ export function mapChildCss(
       classDecls["font-size"] = P(node.text.fontSize);
     if (node.text?.fontWeight != null)
       classDecls["font-weight"] = `${node.text.fontWeight}`;
-    classDecls["font-family"] = sansFonts;
     if (node.text?.lineHeightPx != null)
       classDecls["line-height"] = P(node.text.lineHeightPx || 0);
     const colorCss = rgbaToCss(node.text?.color || undefined);

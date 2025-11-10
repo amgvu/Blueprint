@@ -18,9 +18,11 @@ export function rgbaToCss(c?: RGBA | null): string | undefined {
   const r = Math.round(c.r * 255);
   const g = Math.round(c.g * 255);
   const b = Math.round(c.b * 255);
-  const a = Math.max(0, Math.min(1, c.a));
-  if (a === 0) return undefined;
-  return `rgba(${r}, ${g}, ${b}, ${a})`;
+  const aClamped = Math.max(0, Math.min(1, c.a));
+  const aRounded = Math.round(aClamped * 10) / 10;
+  if (aRounded === 0) return undefined;
+  const aStr = aRounded === 1 || aRounded === 0 ? String(aRounded) : aRounded.toFixed(1);
+  return `rgba(${r}, ${g}, ${b}, ${aStr})`;
 }
 
 export function borderRadiusToCss(
