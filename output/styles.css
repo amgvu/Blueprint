@@ -1,0 +1,169 @@
+.c1 {
+  align-items: center;
+  background-color: rgba(30, 30, 30, 1);
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+  position: relative;
+  width: 100%;
+}
+
+.c2 {
+  background-color: rgba(250, 250, 250, 1);
+  border-radius: 32px;
+  position: relative;
+}
+
+.c3 {
+  position: relative;
+}
+
+.c4 {
+  background-color: rgba(44, 25, 77, 1);
+  border-radius: 100px;
+}
+
+.c5 {
+  color: rgba(54, 51, 65, 1);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial,
+    "Apple Color Emoji", "Segoe UI Emoji", sans-serif;
+  font-size: 48px;
+  font-weight: 700;
+  letter-spacing: -1px;
+  line-height: 58px;
+  margin: 0;
+  text-align: left;
+}
+
+.c6 {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.c7 {
+  width: 329px;
+}
+
+.c8 {
+  align-items: center;
+  border: 1px solid rgba(215, 215, 215, 1);
+  border-radius: 8px 8px 0px 0px;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  justify-content: flex-start;
+  padding: 20px 16px 20px 16px;
+}
+
+.c9 {
+  align-self: stretch;
+}
+
+.c10 {
+  color: rgba(54, 51, 65, 1);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial,
+    "Apple Color Emoji", "Segoe UI Emoji", sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0px;
+  line-height: 18px;
+  margin: 0;
+  text-align: left;
+}
+
+.c11 {
+  align-items: center;
+  border: 1px solid rgba(215, 215, 215, 1);
+  border-radius: 0px 0px 8px 8px;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  justify-content: flex-start;
+  padding: 20px 16px 20px 16px;
+}
+
+.c12 {
+  align-self: stretch;
+  height: 59px;
+}
+
+.c13 {
+  color: rgba(192, 192, 192, 1);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial,
+    "Apple Color Emoji", "Segoe UI Emoji", sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0px;
+  line-height: 18px;
+  margin: 0;
+  text-align: left;
+}
+
+.c14 {
+  align-items: center;
+  background: linear-gradient(
+    -111deg,
+    rgba(149, 34, 140, 1) 0%,
+    rgba(58, 60, 179, 1) 100%
+  );
+  border-radius: 62px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.c15 {
+  height: 46px;
+  width: 361px;
+}
+
+.c16 {
+  color: rgba(255, 255, 255, 1);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial,
+    "Apple Color Emoji", "Segoe UI Emoji", sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0px;
+  line-height: 22px;
+  margin: 0;
+  text-align: left;
+}
+
+.c17 {
+  align-items: center;
+  background-color: rgba(225, 224, 230, 1);
+  border-radius: 62px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.c18 {
+  color: rgba(54, 51, 65, 1);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial,
+    "Apple Color Emoji", "Segoe UI Emoji", sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0px;
+  line-height: 22px;
+  margin: 0;
+  text-align: left;
+}
+
+.c19 {
+  color: rgba(54, 51, 65, 0.800000011920929);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial,
+    "Apple Color Emoji", "Segoe UI Emoji", sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0px;
+  line-height: 16px;
+  margin: 0;
+  text-align: center;
+}
