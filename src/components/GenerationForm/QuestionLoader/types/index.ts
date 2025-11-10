@@ -16,4 +16,12 @@ export type QuestionLoaderProps = {
   error?: string | Array<{ message?: string } | undefined>;
   disabled?: boolean;
   inputClassName?: string;
+  onPrev?: () => void;
+  onNext?: () => void;
+  onCancel?: () => void;
+  isFirstStep?: boolean;
+  isLastStep?: boolean;
+  prevLabel?: string;
+  nextLabel?: string;
+  submitLabel?: string;
 };

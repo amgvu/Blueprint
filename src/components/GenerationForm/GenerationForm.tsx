@@ -1,6 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { Progress } from "@/components/ui/progress";
-import { Button } from "@/components/ui/button";
 import { QuestionLoader } from "./QuestionLoader/QuestionLoader";
 import LoadingScreen from "@/components/GenerationForm/QuestionLoader/LoadingScreen";
 import type { QuestionSchema } from "./QuestionLoader/types";
@@ -103,28 +102,19 @@ export default function GenerationForm({
                   onChange={handleChange}
                   error={error || currentError || undefined}
                   inputClassName="h-12 text-base"
+                  onPrev={handlePrev}
+                  onNext={handleNext}
+                  onCancel={onCancel}
+                  isFirstStep={step === 0}
+                  isLastStep={step >= total - 1}
+                  prevLabel={prevLabel}
+                  nextLabel={nextLabel}
+                  submitLabel={submitLabel}
                 />
               </motion.div>
             ) : null}
           </AnimatePresence>
-          {!isSubmitting ? (
-            <div className="flex items-center justify-between pt-2 pb-6">
-              {step > 0 ? (
-                <Button variant="outline" onClick={handlePrev}>
-                  {prevLabel}
-                </Button>
-              ) : onCancel ? (
-                <Button variant="outline" onClick={onCancel}>
-                  Cancel
-                </Button>
-              ) : (
-                <div />
-              )}
-              <Button onClick={handleNext}>
-                {step < total - 1 ? nextLabel : submitLabel}
-              </Button>
-            </div>
-          ) : null}
+          {/* Navigation buttons are now rendered inside QuestionLoader */}
         </div>
       </main>
     </motion.div>

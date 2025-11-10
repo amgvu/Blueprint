@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import {
   Field,
   FieldContent,
@@ -17,6 +18,14 @@ export function QuestionLoader({
   error,
   disabled,
   inputClassName,
+  onPrev,
+  onNext,
+  onCancel,
+  isFirstStep,
+  isLastStep,
+  prevLabel,
+  nextLabel,
+  submitLabel,
 }: QuestionLoaderProps) {
   const inputId = React.useId();
   const name = question.id;
@@ -28,31 +37,50 @@ export function QuestionLoader({
     : undefined;
 
   return (
-    <Field data-invalid={!!error}>
-      <FieldLabel>
-        <Label htmlFor={inputId}>
-          {question.label}
-          {question.required ? " *" : ""}
-        </Label>
-      </FieldLabel>
-      {question.description ? (
-        <FieldDescription>{question.description}</FieldDescription>
-      ) : null}
+    <div className="space-y-4">
+      <Field data-invalid={!!error}>
+        <FieldLabel>
+          <Label htmlFor={inputId}>
+            {question.label}
+            {question.required ? " *" : ""}
+          </Label>
+        </FieldLabel>
+        {question.description ? (
+          <FieldDescription>{question.description}</FieldDescription>
+        ) : null}
 
-      <FieldContent>
-        {renderControl({
-          question,
-          id: inputId,
-          name,
-          value: value ?? "",
-          disabled: !!disabled,
-          onChange,
-          inputClassName,
-          invalid: !!error,
-        })}
-        <FieldError errors={errorArray} />
-      </FieldContent>
-    </Field>
+        <FieldContent>
+          {renderControl({
+            question,
+            id: inputId,
+            name,
+            value: value ?? "",
+            disabled: !!disabled,
+            onChange,
+            inputClassName,
+            invalid: !!error,
+          })}
+          <FieldError errors={errorArray} />
+        </FieldContent>
+      </Field>
+
+      <div className="flex items-center justify-between pt-2 pb-6">
+        {isFirstStep ? (
+          onCancel ? (
+            <Button variant="outline" onClick={onCancel}>Cancel</Button>
+          ) : (
+            <div />
+          )
+        ) : (
+          <Button variant="outline" onClick={onPrev}>
+            {prevLabel || "Back"}
+          </Button>
+        )}
+        <Button onClick={onNext}>
+          {isLastStep ? submitLabel || "Submit" : nextLabel || "Next"}
+        </Button>
+      </div>
+    </div>
   );
 }
 
