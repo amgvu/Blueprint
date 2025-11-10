@@ -36,7 +36,7 @@ export function GenerationForm({
   const [error, setError] = React.useState<string | null>(null);
 
   const q = questions[step];
-  const progress = total > 0 ? Math.round(((step + 1) / total) * 100) : 0;
+  const progress = total > 0 ? Math.round((step / total) * 100) : 0;
 
   function validate(
     _id: string,
