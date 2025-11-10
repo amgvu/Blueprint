@@ -35,7 +35,6 @@ export default function GenerationForm({
   const {
     total,
     step,
-    direction,
     answers,
     error,
     q,
@@ -91,9 +90,9 @@ export default function GenerationForm({
             ) : q ? (
               <motion.div
                 key={q.id}
-                initial={{ opacity: 0, x: direction > 0 ? -80 : 80 }}
+                initial={{ opacity: 0, x: 80 }}
                 animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: direction > 0 ? -80 : 80 }}
+                exit={{ opacity: 0, x: -80 }}
                 transition={{ duration: 0.25, ease: "easeOut" }}
               >
                 <QuestionLoader
