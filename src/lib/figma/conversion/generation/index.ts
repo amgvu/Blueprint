@@ -15,6 +15,9 @@ export function generateFromIndex(
     centeredTextMode: "auto",
     forceAbsoluteUnderNone: true,
     cssFormat: "compact",
+    htmlFormat: "fragment",
+    cssHref: "styles.css",
+    htmlTitle: "Figma Export",
     ...(options || {}),
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } as any;
@@ -33,7 +36,11 @@ export function generateFromIndex(
     inline: {},
     children: [],
   };
-  const html = emitHtml(root, 0);
+  const bodyHtml = emitHtml(root, 0);
+  const html =
+    opts.htmlFormat === "document"
+      ? `<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <meta charset=\"utf-8\" />\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n    <title>${opts.htmlTitle}</title>\n    <link rel=\"stylesheet\" href=\"${opts.cssHref}\" />\n  </head>\n  <body>\n${bodyHtml}\n  </body>\n</html>`
+      : bodyHtml;
   const css = registry.cssText(opts.cssFormat);
   return { html, css };
 }

@@ -57,7 +57,8 @@ function App() {
 
   async function downloadZip() {
     const zip = new JSZip();
-    zip.file("index.html", html);
+    const docHtml = `<!DOCTYPE html>\n<html lang="en">\n  <head>\n    <meta charset="utf-8" />\n    <meta name="viewport" content="width=device-width, initial-scale=1" />\n    <title>Figma Export</title>\n    <link rel="stylesheet" href="styles.css" />\n  </head>\n  <body>\n${html}\n  </body>\n</html>`;
+    zip.file("index.html", docHtml);
     zip.file("styles.css", css);
     const blob = await zip.generateAsync({ type: "blob" });
     const url = URL.createObjectURL(blob);

@@ -6,4 +6,7 @@ export type ConversionOptions = {
   centeredTextMode?: "auto" | "constraints";
   forceAbsoluteUnderNone?: boolean;
   cssFormat?: "compact" | "pretty";
+  htmlFormat?: "fragment" | "document";
+  cssHref?: string;
+  htmlTitle?: string;
 };
