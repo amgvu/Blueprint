@@ -1,4 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import type { z } from "zod";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -15,6 +18,7 @@ export type GenerationFormProps = {
   submitLabel?: string;
   onSubmit?: (answers: Record<string, string>) => void;
   onCancel?: () => void;
+  validateSchema?: z.ZodTypeAny;
 };
 
 export function GenerationForm({
@@ -27,6 +31,7 @@ export function GenerationForm({
   submitLabel = "Generate",
   onSubmit,
   onCancel,
+  validateSchema,
 }: GenerationFormProps) {
   const total = questions.length;
   const [step, setStep] = React.useState(0);
@@ -34,16 +39,23 @@ export function GenerationForm({
     initialValues || {}
   );
   const [error, setError] = React.useState<string | null>(null);
+  const [direction, setDirection] = React.useState<1 | -1>(1);
 
   const q = questions[step];
   const progress = total > 0 ? Math.round((step / total) * 100) : 0;
 
-  function validate(
-    _id: string,
+  function validateField(
+    id: string,
     value: string,
     type: QuestionSchema["type"],
     required?: boolean
   ) {
+    if (validateSchema && (validateSchema as any)?.shape?.[id]) {
+      const res = (validateSchema as any).shape[id].safeParse(value);
+      if (!res.success)
+        return res.error.issues?.[0]?.message || "Invalid value";
+      return null;
+    }
     const v = (value || "").trim();
     if (required && v.length === 0) return "This field is required";
     if (type === "url" && v.length > 0 && !/^https?:\/\//i.test(v))
@@ -53,7 +65,7 @@ export function GenerationForm({
 
   const currentValue = q ? answers[q.id] || "" : "";
   const currentError = q
-    ? validate(q.id, currentValue, q.type, q.required)
+    ? validateField(q.id, currentValue, q.type, q.required)
     : null;
 
   function handleChange(id: string, value: string) {
@@ -63,19 +75,29 @@ export function GenerationForm({
 
   function handlePrev() {
     setError(null);
+    setDirection(-1);
     setStep((s) => Math.max(0, s - 1));
   }
 
   function handleNext() {
     if (!q) return;
-    const err = validate(q.id, answers[q.id] || "", q.type, q.required);
+    const err = validateField(q.id, answers[q.id] || "", q.type, q.required);
     if (err) {
       setError(err);
       return;
     }
     if (step < total - 1) {
+      setDirection(1);
       setStep((s) => Math.min(total - 1, s + 1));
       return;
+    }
+    if (validateSchema) {
+      const parsed = validateSchema.safeParse(answers);
+      if (!parsed.success) {
+        const issue = parsed.error.issues?.[0];
+        setError(issue?.message || "Please correct the errors");
+        return;
+      }
     }
     onSubmit?.(answers);
   }
@@ -97,15 +119,25 @@ export function GenerationForm({
 
       <main className="flex-1 grid place-items-center px-6">
         <div className="w-full max-w-2xl space-y-4">
-          {q ? (
-            <QuestionLoader
-              question={q}
-              value={answers[q.id] || ""}
-              onChange={handleChange}
-              error={error || currentError || undefined}
-              inputClassName="h-12 text-base"
-            />
-          ) : null}
+          <AnimatePresence mode="wait" initial={false}>
+            {q ? (
+              <motion.div
+                key={q.id}
+                initial={{ opacity: 0, x: direction > 0 ? 80 : -80 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: direction > 0 ? 80 : -80 }}
+                transition={{ duration: 0.25, ease: "easeOut" }}
+              >
+                <QuestionLoader
+                  question={q}
+                  value={answers[q.id] || ""}
+                  onChange={handleChange}
+                  error={error || currentError || undefined}
+                  inputClassName="h-12 text-base"
+                />
+              </motion.div>
+            ) : null}
+          </AnimatePresence>
           {error ? (
             <Alert variant="destructive">
               <AlertDescription>{error}</AlertDescription>
