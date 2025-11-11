@@ -1,6 +1,6 @@
 # Blueprint — a Figma-to-HTML/CSS Converter
 
-Converts a Figma mockup from URL, into HTMl/CSS
+Converts a Figma mockup from URL, into HTML/CSS
 
 ## Prototype Demo (30 Seconds)
 
