@@ -1,4 +1,9 @@
 .c1 {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial,
+    "Apple Color Emoji", "Segoe UI Emoji", sans-serif;
+}
+
+.c2 {
   align-items: center;
   background-color: rgba(30, 30, 30, 1);
   display: flex;
@@ -10,22 +15,22 @@
   width: 100%;
 }
 
-.c2 {
+.c3 {
   background-color: rgba(250, 250, 250, 1);
   border-radius: 32px;
   position: relative;
 }
 
-.c3 {
+.c4 {
   position: relative;
 }
 
-.c4 {
+.c5 {
   background-color: rgba(44, 25, 77, 1);
   border-radius: 100px;
 }
 
-.c5 {
+.c6 {
   color: rgba(54, 51, 65, 1);
   font-size: 48px;
   font-weight: 700;
@@ -35,18 +40,18 @@
   text-align: left;
 }
 
-.c6 {
+.c7 {
   align-items: flex-start;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
 }
 
-.c7 {
+.c8 {
   width: 329px;
 }
 
-.c8 {
+.c9 {
   align-items: center;
   border: 1px solid rgba(215, 215, 215, 1);
   border-radius: 8px 8px 0px 0px;
@@ -57,11 +62,11 @@
   padding: 20px 16px 20px 16px;
 }
 
-.c9 {
+.c10 {
   align-self: stretch;
 }
 
-.c10 {
+.c11 {
   color: rgba(54, 51, 65, 1);
   font-size: 15px;
   font-weight: 500;
@@ -71,7 +76,7 @@
   text-align: left;
 }
 
-.c11 {
+.c12 {
   align-items: center;
   border: 1px solid rgba(215, 215, 215, 1);
   border-radius: 0px 0px 8px 8px;
@@ -82,12 +87,12 @@
   padding: 20px 16px 20px 16px;
 }
 
-.c12 {
+.c13 {
   align-self: stretch;
   height: 59px;
 }
 
-.c13 {
+.c14 {
   color: rgba(192, 192, 192, 1);
   font-size: 15px;
   font-weight: 500;
@@ -97,7 +102,7 @@
   text-align: left;
 }
 
-.c14 {
+.c15 {
   align-items: center;
   background: linear-gradient(
     -111deg,
@@ -112,12 +117,12 @@
   overflow: hidden;
 }
 
-.c15 {
+.c16 {
   height: 46px;
   width: 361px;
 }
 
-.c16 {
+.c17 {
   color: rgba(255, 255, 255, 1);
   font-size: 15px;
   font-weight: 600;
@@ -127,7 +132,7 @@
   text-align: left;
 }
 
-.c17 {
+.c18 {
   align-items: center;
   background-color: rgba(225, 224, 230, 1);
   border-radius: 62px;
@@ -138,7 +143,7 @@
   overflow: hidden;
 }
 
-.c18 {
+.c19 {
   color: rgba(54, 51, 65, 1);
   font-size: 15px;
   font-weight: 600;
@@ -148,7 +153,7 @@
   text-align: left;
 }
 
-.c19 {
+.c20 {
   color: rgba(54, 51, 65, 0.8);
   font-size: 13px;
   font-weight: 500;
