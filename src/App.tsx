@@ -95,7 +95,7 @@ function App() {
             </div>
             <div className="flex items-center gap-2">
               <Button variant="outline" onClick={() => setView("form")}>
-                Back to form
+                Restart
               </Button>
               <Button onClick={downloadZip}>Download .zip</Button>
             </div>

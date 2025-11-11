@@ -22,11 +22,11 @@ export type GenerationFormProps = {
 export default function GenerationForm({
   questions,
   initialValues,
-  title = "Generate from Figma",
+  title = "Convert from Figma",
   description = "Enter your credentials to continue",
   nextLabel = "Next",
   prevLabel = "Back",
-  submitLabel = "Generate",
+  submitLabel = "Convert",
   onSubmit,
   onCancel,
   validateSchema,
@@ -85,7 +85,7 @@ export default function GenerationForm({
                 exit={{ opacity: 0, x: -80 }}
                 transition={{ duration: 0.25, ease: "easeOut" }}
               >
-                <LoadingScreen message="Generating your preview…" />
+                <LoadingScreen message="Converting your file into HTML/CSS..." />
               </motion.div>
             ) : q ? (
               <motion.div
