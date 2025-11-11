@@ -125,6 +125,15 @@ https://github.com/user-attachments/assets/2e22bfc6-2198-4951-a2c3-a24686f15c66
 - [x] Preview app to inspect output
 - [x] Docs with setup, usage, and limitations
 
+## Planned Product Refactor
+
+- Auth
+  - Replace explicit token based authentication with Figma OAuth
+- Workflow
+  - View mockups in home page before viewing for conversion
+  - Convert preview window into editor style workflow with real-time changes.
+  - CDE (Cloud Based Development Environment) model
+
 ## Known Caveats
 
 - Cross-file copy/paste
@@ -137,15 +146,6 @@ https://github.com/user-attachments/assets/2e22bfc6-2198-4951-a2c3-a24686f15c66
   - Detached or unresolved styles can change text color/weights or spacing when pasted without linked libraries.
 - Stroke/borders
   - Figma stroke alignment can’t be reproduced exactly with CSS `border`; subtle differences can occur on tight layouts.
-
-## Planned Product Refactor
-
-- Auth
-  - Replace explicit token based authentication with Figma OAuth
-- Workflow
-  - View mockups in home page before viewing for conversion
-  - Convert preview window into editor style workflow with real-time changes.
-  - CDE (Cloud Based Development Environment) model
 
 ## Assignment Mapping
 
