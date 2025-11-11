@@ -2,6 +2,10 @@
 
 Converts a Figma mockup from URL, into HTMl/CSS
 
+## Prototype Demo (30 Seconds)
+
+https://github.com/user-attachments/assets/9c3b151d-92c0-474c-a271-c2b640d226eb
+
 ## How It Works (API → Normalize → Index → Convert)
 
 - Fetch (API)
