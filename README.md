@@ -1,10 +1,9 @@
-# Figma → HTML/CSS (Figwave)
+# blueprint — a Figma-to-HTML/CSS Converter
 
 Converts a Figma mockup from URL, into HTMl/CSS
 
 ## Prototype Demo (30 Seconds)
-
-https://github.com/user-attachments/assets/9c3b151d-92c0-474c-a271-c2b640d226eb
+https://github.com/user-attachments/assets/2e22bfc6-2198-4951-a2c3-a24686f15c66
 
 ## How It Works (API → Normalize → Index → Convert)
 
