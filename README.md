@@ -125,7 +125,7 @@ https://github.com/user-attachments/assets/2e22bfc6-2198-4951-a2c3-a24686f15c66
 - [x] Preview app to inspect output
 - [x] Docs with setup, usage, and limitations
 
-## Planned Product Refactor
+## Planned Product Roadmap
 
 - Auth
   - Replace explicit token based authentication with Figma OAuth
