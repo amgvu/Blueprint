@@ -39,7 +39,6 @@ export default function GenerationForm({
     error,
     q,
     progress,
-    currentError,
     handleChange,
     handlePrev,
     handleNext,
@@ -99,7 +98,7 @@ export default function GenerationForm({
                   question={q}
                   value={answers[q.id] || ""}
                   onChange={handleChange}
-                  error={error || currentError || undefined}
+                  error={error || undefined}
                   inputClassName="h-12 text-base"
                   onPrev={handlePrev}
                   onNext={handleNext}
