@@ -48,21 +48,7 @@ https://github.com/user-attachments/assets/2e22bfc6-2198-4951-a2c3-a24686f15c66
 - Deterministic output
   - Class registry deduplicates CSS
   - Non-renderable nodes pruned
-
-## Scripts
-
-- `pnpm dev` — start app with HMR
-- `pnpm build` — type-check and production build of the app
-- `pnpm preview` — preview the production build
-- `pnpm test:run` — run tests (Vitest)
-
-## Preparing Your Figma File
-
-- Prefer Frames over Groups for layout
-- Use Auto Layout for containers; set `itemSpacing` for list spacing
-- Set sizing intents on children (HUG/FILL/FIXED); use grow/align-self where appropriate
-- Use absolute positioning only for overlays/icons; set constraints (left/right, top/bottom, center) when applicable
-
+ 
 ## Limitations
 
 - Visual fidelity: layout and spacing are prioritized; exact typography and effects may differ
@@ -102,6 +88,33 @@ https://github.com/user-attachments/assets/2e22bfc6-2198-4951-a2c3-a24686f15c66
   - Strokes map to CSS `border` without adjusting box measurements; subtle spacing differences can appear when borders occupy space.
 - No min/max constraints
   - Min/max sizing is not modeled; HUG with minimums or clamp-like behaviors are not reproduced.
+ 
+## Known Caveats
+
+- Cross-file copy/paste
+  - Copying designs between Figma files often drops Auto Layout, constraints, library styles, or instances. Prefer duplicating inside the same file or relinking styles after paste.
+- Layout:none parents
+  - Frames without Auto Layout produce absolutely positioned children; spacing then reflects absolute Y offsets rather than `gap`. Use Auto Layout for lists and set `itemSpacing` for consistent gaps.
+- Fonts
+  - Enforced system sans for predictability; if your design uses Inter or another font, metrics may differ slightly.
+- Components/instances from external libraries
+  - Detached or unresolved styles can change text color/weights or spacing when pasted without linked libraries.
+- Stroke/borders
+  - Figma stroke alignment can’t be reproduced exactly with CSS `border`; subtle differences can occur on tight layouts.
+
+## Scripts
+
+- `pnpm dev` — start app with HMR
+- `pnpm build` — type-check and production build of the app
+- `pnpm preview` — preview the production build
+- `pnpm test:run` — run tests (Vitest)
+
+## Preparing Your Figma File
+
+- Prefer Frames over Groups for layout
+- Use Auto Layout for containers; set `itemSpacing` for list spacing
+- Set sizing intents on children (HUG/FILL/FIXED); use grow/align-self where appropriate
+- Use absolute positioning only for overlays/icons; set constraints (left/right, top/bottom, center) when applicable
 
 ## Testing
 
@@ -125,32 +138,6 @@ https://github.com/user-attachments/assets/2e22bfc6-2198-4951-a2c3-a24686f15c66
 - [x] Preview app to inspect output
 - [x] Docs with setup, usage, and limitations
 
-## Planned Product Roadmap
-
-- Auth
-  - Replace explicit token based authentication with Figma OAuth
-- Workflow
-  - View mockups in home page before viewing for conversion
-  - Convert preview window into editor style workflow with real-time changes
-- Features
-  - Tailwind Support
-  - React Component-ization (Just add props)
-- High Level
-  - CDE (Cloud Based Development Environment) model OR CLI-driven DX tool
-
-## Known Caveats
-
-- Cross-file copy/paste
-  - Copying designs between Figma files often drops Auto Layout, constraints, library styles, or instances. Prefer duplicating inside the same file or relinking styles after paste.
-- Layout:none parents
-  - Frames without Auto Layout produce absolutely positioned children; spacing then reflects absolute Y offsets rather than `gap`. Use Auto Layout for lists and set `itemSpacing` for consistent gaps.
-- Fonts
-  - Enforced system sans for predictability; if your design uses Inter or another font, metrics may differ slightly.
-- Components/instances from external libraries
-  - Detached or unresolved styles can change text color/weights or spacing when pasted without linked libraries.
-- Stroke/borders
-  - Figma stroke alignment can’t be reproduced exactly with CSS `border`; subtle differences can occur on tight layouts.
-
 ## Assignment Mapping
 
 - Context: Convert Figma mocks into HTML/CSS
@@ -164,3 +151,16 @@ https://github.com/user-attachments/assets/2e22bfc6-2198-4951-a2c3-a24686f15c66
   - Tricky cases: borders handled via border, linear gradients supported (radial/effects out of scope)
 - Generalization
   - Normalization + flattened structure allow the converter to operate on arbitrary Figma files for common nodes (frames/text/rectangles/groups/components/instances), with the limitations noted above.
+ 
+## Potential Product Roadmap
+
+- Auth
+  - Replace explicit token based authentication with Figma OAuth
+- Workflow
+  - View mockups in home page before viewing for conversion
+  - Convert preview window into editor style workflow with real-time changes
+- Features
+  - Tailwind Support
+  - React Component-ization (Just add props)
+- High Level
+  - CDE (Cloud Based Development Environment) model OR CLI-driven DX tool
