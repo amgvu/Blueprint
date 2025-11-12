@@ -131,8 +131,12 @@ https://github.com/user-attachments/assets/2e22bfc6-2198-4951-a2c3-a24686f15c66
   - Replace explicit token based authentication with Figma OAuth
 - Workflow
   - View mockups in home page before viewing for conversion
-  - Convert preview window into editor style workflow with real-time changes.
-  - CDE (Cloud Based Development Environment) model
+  - Convert preview window into editor style workflow with real-time changes
+- Features
+  - Tailwind Support
+  - React Component-ization (Just add props)
+- High Level
+  - CDE (Cloud Based Development Environment) model OR CLI-driven DX tool
 
 ## Known Caveats
 
