@@ -5,7 +5,8 @@ export const generationQuestions: QuestionSchema[] = [
     id: "apiKey",
     type: "password",
     label: "Figma PAT (Personal Access Token)",
-    description: "Personal access token used to fetch the Figma file",
+    description:
+      "Personal access token used to fetch the Figma file. Tokens are never stored or used for any other purpose.",
     placeholder: "figd_...",
     required: true,
   },
