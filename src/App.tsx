@@ -14,6 +14,7 @@ import {
   createIndex,
   generateFromIndex,
 } from "./lib/figma";
+import { Analytics } from "@vercel/analytics/react";
 
 function App() {
   const initialValues = {
@@ -71,6 +72,7 @@ function App() {
 
   return (
     <main className="min-h-screen bg-background text-foreground">
+      <Analytics />
       {view === "form" ? (
         <GenerationForm
           questions={generationQuestions}
